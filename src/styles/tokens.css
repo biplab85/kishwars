@@ -1,0 +1,40 @@
+:root {
+  /* RGB triplets — drive Tailwind's `<alpha-value>` syntax in tailwind.config.ts.
+     Both <space-separated> integers per channel; alpha gets injected per usage. */
+  --kc-ember: 14 11 9;
+  --kc-smoke: 58 52 49;
+  --kc-cream: 245 235 220;
+
+  /* Direct color aliases — for plain CSS / inline `style` consumers */
+  --color-ember: rgb(var(--kc-ember));
+  --color-smoke: rgb(var(--kc-smoke));
+  --color-cream: rgb(var(--kc-cream));
+  --color-saffron: #E2761B;
+  --color-saffron-deep: #D97706;
+  --color-pomegranate: #7A1F2B;
+  --color-gold: #C9A24A;
+
+  --ease-cinematic: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-exhale: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-hover: cubic-bezier(0.25, 0.1, 0.25, 1);
+
+  --dur-fast: 200ms;
+  --dur-base: 450ms;
+  --dur-slow: 900ms;
+  --dur-cinematic: 1200ms;
+
+  --space-section: clamp(6rem, 12vh, 10rem);
+  --space-gutter: clamp(1.25rem, 4vw, 3rem);
+
+  --grain-opacity: 0.06;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-fast: 0ms;
+    --dur-base: 0ms;
+    --dur-slow: 0ms;
+    --dur-cinematic: 0ms;
+  }
+}
+
