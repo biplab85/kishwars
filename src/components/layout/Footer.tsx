@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { text } from "@/content/text";
 import { Logo } from "@/components/layout/Logo";
 
@@ -96,9 +97,15 @@ const resourceIcons: Record<string, (p: IconProps) => React.JSX.Element> = {
   Newsletter: navIcons.Newsletter,
 };
 
+// Footer navigation hides the same items as the header, plus "Home"
+// (the cookbook/site logo above already links home, no need to repeat it).
+const HIDDEN_FROM_NAV = ["Home", "Story", "Videos", "Press", "Cookbook", "Newsletter"];
+
 export function Footer() {
   const { socials, legal } = text.footer;
-  const navItems = text.nav.items;
+  const navItems = text.nav.items.filter(
+    (item) => !HIDDEN_FROM_NAV.includes(item.label),
+  );
   const channel = text.nav.channelCta;
   const year = new Date().getFullYear();
 
@@ -108,9 +115,9 @@ export function Footer() {
         <div className="mb-12 grid gap-12 md:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_1fr] lg:gap-16">
           {/* Brand + CTA */}
           <div className="lg:pr-8">
-            <a href="#top" className="mb-4 inline-block">
+            <Link href="/" aria-label="Kishwar — home" className="mb-4 inline-block">
               <Logo size="lg" />
-            </a>
+            </Link>
             <p className="mb-6 max-w-sm text-sm text-cream/60">
               Chef, writer, and food creator. MasterChef Australia finalist —
               telling the story of heritage Bengali cuisine, one plate at a time.

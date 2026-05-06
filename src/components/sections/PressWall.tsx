@@ -6,13 +6,13 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { Fancybox } from "@fancyapps/ui";
 import "@fancyapps/ui/dist/fancybox/fancybox.css";
 import { text } from "@/content/text";
+import { images } from "@/content/images";
 import { Eyebrow } from "@/components/primitives/Eyebrow";
 import { Reveal } from "@/components/motion/Reveal";
 
 const pressItems = [
   {
-    image:
-      "https://static.wixstatic.com/media/a338cb_312b12466f414ed2b7be48cca1e2fd51~mv2.png",
+    image: images.pressNetwork10.src,
     alt: "Press feature — Kishwar Chowdhury editorial.",
     outlet: "Network 10 · MasterChef",
     year: "2021",
@@ -20,8 +20,7 @@ const pressItems = [
       "Now my life starts. Kishwar Chowdhury takes third in the MasterChef Australia 2021 grand finale.",
   },
   {
-    image:
-      "https://static.wixstatic.com/media/a338cb_a58ac012fae844fead9bdef81ff5d636~mv2.png",
+    image: images.pressBdNews24.src,
     alt: "Press feature — Kishwar Chowdhury portrait.",
     outlet: "BD News 24",
     year: "2021",
@@ -29,8 +28,7 @@ const pressItems = [
       "Kishwar reimagined Bengali dishes on Australia's most-watched cooking stage and finished third.",
   },
   {
-    image:
-      "https://static.wixstatic.com/media/a338cb_a932c7ae0c1b425ebe949b98d26920b2~mv2.png",
+    image: images.pressDailyStar.src,
     alt: "Press feature — Kishwar Chowdhury cover story.",
     outlet: "The Daily Star",
     year: "2022",

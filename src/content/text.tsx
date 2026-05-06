@@ -139,10 +139,15 @@ export const text: SiteTextShape = {
   nav: {
     items: [
       { label: "Home", href: "#top" },
+      { label: "About", href: "/about" },
       { label: "Story", href: "#story" },
       { label: "Videos", href: "#videos" },
       { label: "Press", href: "#press" },
       { label: "Cookbook", href: "#book" },
+      { label: "My Book", href: "/my-book" },
+      { label: "Recipes", href: "/recipes" },
+      { label: "Collaboration", href: "/collaboration" },
+      { label: "Contact", href: "/contact" },
       { label: "Newsletter", href: "#newsletter" },
     ],
     subscribeCta: { label: "Subscribe", href: "#newsletter" },

@@ -24,3 +24,5 @@ _source
 
 .playwright-mcp
 page-load-*.png
+page-snapshot.yml
+public/images/my-default-browser-screenshot.png

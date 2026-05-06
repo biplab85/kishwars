@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kishwar Chowdhury - Website Content</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --sidebar-width: 300px;
+    --bg: #f8f7f4;
+    --sidebar-bg: #1a1a2e;
+    --sidebar-text: #c4c4d4;
+    --sidebar-active: #e2b45a;
+    --sidebar-hover: #2a2a4a;
+    --text: #2c2c2c;
+    --text-muted: #666;
+    --accent: #c8873e;
+    --accent-light: #fdf3e7;
+    --border: #e0ddd6;
+    --card-bg: #fff;
+    --tag-bg: #eee8df;
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    display: flex;
+    min-height: 100vh;
+  }
+  .sidebar {
+    width: var(--sidebar-width);
+    min-height: 100vh;
+    background: var(--sidebar-bg);
+    color: var(--sidebar-text);
+    position: fixed;
+    top: 0;
+    left: 0;
+    overflow-y: auto;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+  }
+  .sidebar-header {
+    padding: 28px 24px 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .sidebar-header h1 {
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 0.3px;
+    line-height: 1.4;
+  }
+  .sidebar-header .subtitle {
+    font-size: 12px;
+    color: var(--sidebar-active);
+    margin-top: 6px;
+    font-weight: 500;
+  }
+  .nav-list {
+    list-style: none;
+    padding: 12px 0;
+    flex: 1;
+  }
+  .nav-item {
+    cursor: pointer;
+    font-size: 13.5px;
+    padding: 10px 24px;
+    transition: all 0.15s ease;
+    border-left: 3px solid transparent;
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+  .nav-item:hover {
+    background: var(--sidebar-hover);
+    color: #fff;
+  }
+  .nav-item.active {
+    background: var(--sidebar-hover);
+    color: var(--sidebar-active);
+    border-left-color: var(--sidebar-active);
+    font-weight: 600;
+  }
+  .nav-item .nav-num {
+    font-size: 11px;
+    opacity: 0.5;
+    min-width: 18px;
+  }
+  .nav-divider {
+    height: 1px;
+    background: rgba(255,255,255,0.06);
+    margin: 8px 24px;
+  }
+  .main {
+    margin-left: var(--sidebar-width);
+    flex: 1;
+    min-width: 0;
+  }
+  .content-area {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 48px 48px 80px;
+  }
+  .section { display: none; }
+  .section.active { display: block; }
+  .section h2 {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+    line-height: 1.3;
+  }
+  .section .section-subtitle {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-bottom: 32px;
+    padding-bottom: 24px;
+    border-bottom: 2px solid var(--accent);
+    display: inline-block;
+  }
+  .section h3 {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+    margin-top: 36px;
+    margin-bottom: 14px;
+  }
+  .section h4 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-top: 28px;
+    margin-bottom: 10px;
+  }
+  .section p { margin-bottom: 16px; font-size: 15px; }
+  .section ul, .section ol { margin-bottom: 16px; padding-left: 24px; }
+  .section li { margin-bottom: 8px; font-size: 15px; }
+  .section strong { color: #1a1a1a; }
+  .callout {
+    background: var(--accent-light);
+    border-left: 4px solid var(--accent);
+    padding: 18px 22px;
+    margin: 20px 0;
+    border-radius: 0 8px 8px 0;
+    font-size: 15px;
+  }
+  .callout strong { display: block; margin-bottom: 4px; }
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 14px;
+    margin: 20px 0;
+  }
+  .stat-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px;
+    text-align: center;
+  }
+  .stat-card .stat-value {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--accent);
+  }
+  .stat-card .stat-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 18px 0;
+    font-size: 14px;
+    background: var(--card-bg);
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  thead th {
+    background: var(--sidebar-bg);
+    color: #fff;
+    font-weight: 600;
+    text-align: left;
+    padding: 12px 16px;
+    font-size: 12.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  tbody td {
+    padding: 11px 16px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover { background: #fafaf7; }
+  .page-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px;
+    margin-bottom: 22px;
+  }
+  .page-card h3 {
+    margin-top: 0;
+    color: var(--text);
+    border-bottom: 2px solid var(--accent);
+    padding-bottom: 10px;
+  }
+  .page-card h4 { margin-top: 20px; }
+  .page-content {
+    background: var(--card-bg);
+    border-left: 3px solid var(--accent);
+    padding: 20px 24px;
+    margin: 14px 0;
+    line-height: 1.85;
+    font-size: 15px;
+    border-radius: 0 6px 6px 0;
+  }
+  .page-content em { font-style: italic; font-weight: 600; color: var(--text); }
+  .layout-note {
+    background: #eee8df;
+    padding: 16px 20px;
+    border-radius: 8px;
+    margin: 14px 0;
+    font-size: 14px;
+    color: #555;
+  }
+  .layout-note strong { color: #444; }
+  .cta-note {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    padding: 6px 16px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    margin: 6px 4px 6px 0;
+  }
+  .section-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    gap: 12px;
+  }
+  .section-nav .nav-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.15s ease;
+  }
+  .section-nav .nav-btn.next {
+    background: var(--accent);
+    color: #fff;
+    margin-left: auto;
+  }
+  .section-nav .nav-btn.next:hover { background: #b5762f; }
+  .section-nav .nav-btn.prev {
+    background: var(--card-bg);
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+  .section-nav .nav-btn.prev:hover { background: var(--tag-bg); }
+  .section-nav .nav-btn .arrow { font-size: 16px; }
+  .hamburger {
+    display: none;
+    position: fixed;
+    top: 14px;
+    left: 14px;
+    z-index: 200;
+    background: var(--sidebar-bg);
+    border: none;
+    color: #fff;
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    font-size: 20px;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+  }
+  .overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 90;
+  }
+  @media (max-width: 860px) {
+    .sidebar { transform: translateX(-100%); transition: transform 0.25s ease; }
+    .sidebar.open { transform: translateX(0); }
+    .main { margin-left: 0; }
+    .content-area { padding: 60px 20px 48px; }
+    .hamburger { display: flex; }
+    .overlay.open { display: block; }
+    .stat-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+<button class="hamburger" onclick="toggleSidebar()">&#9776;</button>
+<div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <h1>Kishwar Chowdhury</h1>
+    <div class="subtitle">Website Content</div>
+  </div>
+  <ul class="nav-list">
+    <li class="nav-item active" data-section="overview"><span class="nav-num">1</span> Overview</li>
+    <li class="nav-divider"></li>
+    <li class="nav-item" data-section="page-home"><span class="nav-num">2</span> Home</li>
+    <li class="nav-item" data-section="page-about"><span class="nav-num">3</span> About / My Story</li>
+    <li class="nav-item" data-section="page-collabs"><span class="nav-num">4</span> Collaborations</li>
+    <li class="nav-item" data-section="page-book"><span class="nav-num">5</span> Cookbook</li>
+    <li class="nav-item" data-section="page-recipes"><span class="nav-num">6</span> Recipes</li>
+    <li class="nav-item" data-section="page-events"><span class="nav-num">7</span> Events</li>
+    <li class="nav-item" data-section="page-press"><span class="nav-num">8</span> Press &amp; Media</li>
+    <li class="nav-item" data-section="page-blog"><span class="nav-num">9</span> Blog / Stories</li>
+    <li class="nav-item" data-section="page-newsletter"><span class="nav-num">10</span> Newsletter</li>
+    <li class="nav-item" data-section="page-contact"><span class="nav-num">11</span> Contact</li>
+  </ul>
+</nav>
+
+<main class="main">
+<div class="content-area">
+
+<!-- 1. OVERVIEW -->
+<div class="section active" id="overview">
+  <h2>Website Content</h2>
+  <div class="section-subtitle">Page-by-page content for kishwar.com.au</div>
+
+  <div class="stat-grid">
+    <div class="stat-card"><div class="stat-value">10</div><div class="stat-label">Pages</div></div>
+    <div class="stat-card"><div class="stat-value">8</div><div class="stat-label">Recipe Categories</div></div>
+    <div class="stat-card"><div class="stat-value">20</div><div class="stat-label">Launch Recipes</div></div>
+    <div class="stat-card"><div class="stat-value">6</div><div class="stat-label">Blog Pillars</div></div>
+  </div>
+
+  <div class="callout">
+    <strong>Prepared: April 2026</strong>
+    This document contains the content for every page on the new kishwar.com.au website. Copy the text directly into each page. Layout notes (grey boxes) describe visual elements the designer/developer will build.
+  </div>
+
+  <h3>Site Architecture - 10 Pages</h3>
+
+  <table>
+    <thead>
+      <tr><th>#</th><th>Page</th><th>URL</th><th>Purpose</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>1</td><td>Home</td><td>kishwar.com.au/</td><td>First impression, route visitors deeper</td></tr>
+      <tr><td>2</td><td>About / My Story</td><td>kishwar.com.au/about/</td><td>Heritage narrative, authority</td></tr>
+      <tr><td>3</td><td>Collaborations &amp; Partnerships</td><td>kishwar.com.au/collaborations/</td><td>B2B inquiry funnel</td></tr>
+      <tr><td>4</td><td>Cookbook "Smoke Rice Water"</td><td>kishwar.com.au/book/</td><td>Primary product, launch landing page</td></tr>
+      <tr><td>5</td><td>Recipes</td><td>kishwar.com.au/recipes/</td><td>Organic traffic driver</td></tr>
+      <tr><td>6</td><td>Events</td><td>kishwar.com.au/events/</td><td>Calendar, tickets, past events gallery</td></tr>
+      <tr><td>7</td><td>Press &amp; Media</td><td>kishwar.com.au/press/</td><td>Credibility, downloadable press kit</td></tr>
+      <tr><td>8</td><td>Blog / Stories</td><td>kishwar.com.au/blog/</td><td>Cultural storytelling, SEO</td></tr>
+      <tr><td>9</td><td>Newsletter</td><td>kishwar.com.au/newsletter/</td><td>Lead capture landing page</td></tr>
+      <tr><td>10</td><td>Contact</td><td>kishwar.com.au/contact/</td><td>Inquiry routing, FAQ</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Primary Navigation (6 items)</h3>
+  <p><strong>Recipes</strong> | <strong>About</strong> | <strong>Collaborations</strong> | <strong>Book</strong> | <strong>Blog</strong> | <strong>Contact</strong></p>
+
+  <h3>Footer Navigation</h3>
+  <p>Events | Press &amp; Media | Newsletter | Privacy Policy | Terms</p>
+</div>
+
+<!-- 2. HOME -->
+<div class="section" id="page-home">
+  <h2>Page 1: Home</h2>
+  <div class="section-subtitle">kishwar.com.au/</div>
+
+  <h3>1. Hero Section</h3>
+  <div class="layout-note">
+    <strong>Layout:</strong> Full-width video hero (10-15 second ambient loop of Kishwar cooking)
+  </div>
+  <div class="page-content">
+    Kishwar Chowdhury<br>
+    Bangladeshi-Australian Chef. Author. Speaker.
+  </div>
+  <p><span class="cta-note">Pre-order Smoke Rice Water</span> links to /book/</p>
+  <p><span class="cta-note">Explore Recipes</span> links to /recipes/</p>
+
+  <h3>2. Introduction Block</h3>
+  <div class="page-content">
+    Bengali food is one of the most fragrant, complex and overlooked cuisines in the world - and it comes from a culture of over 200 million people.<br><br>
+    Kishwar Chowdhury is a Bangladeshi-Australian chef, author and speaker based in Melbourne. A MasterChef Australia Season 13 finalist, TEDx speaker, and Cricket Australia Multicultural Ambassador, she is dedicated to preserving Bengali heritage through food - one recipe, one story, one plate at a time.<br><br>
+    Her debut cookbook, <em>Smoke Rice Water: Recipes and Stories from a Bengali Home</em>, publishes in June 2026 with Hardie Grant.
+  </div>
+
+  <h3>3. Featured Cookbook Block</h3>
+  <div class="layout-note">
+    <strong>Layout:</strong> Book cover image (left) + text (right)
+  </div>
+  <div class="page-content">
+    <em>Smoke Rice Water</em><br>
+    Recipes and Stories from a Bengali Home<br><br>
+    100 recipes from Bengal - street snacks, Mughal court dishes, fish stews, green-mango lentils, and sweets. A cookbook that proves Bengali cuisine deserves its place on the world stage.<br><br>
+    Hardie Grant Books | 23 June 2026
+  </div>
+  <p><span class="cta-note">Pre-order Now</span> links to /book/</p>
+
+  <h3>4. Latest Recipes Grid</h3>
+  <div class="layout-note">
+    <strong>Layout:</strong> 3-4 recipe cards with photo, title, cook time, category. Dynamically pulled from /recipes/ - shows most recent recipes.
+  </div>
+  <p><span class="cta-note">View All Recipes</span></p>
+
+  <h3>5. Social Proof Strip</h3>
+  <div class="layout-note">
+    <strong>Layout:</strong> Horizontal logo bar<br>
+    <strong>Logos:</strong> MasterChef Australia | SBS Food | TEDx | Cricket Australia | Crown Melbourne | World Vision Australia | NGV
+  </div>
+
+  <h3>6. Newsletter Signup</h3>
+  <div class="page-content">
+    <em>Get 5 Free Bengali Heritage Recipes</em><br>
+    Join the mailing list for monthly recipes, event announcements, and behind-the-scenes stories from the Bengali kitchen.
+  </div>
+  <div class="layout-note">
+    <strong>Form field:</strong> Email address
+  </div>
+  <p><span class="cta-note">Send Me the Recipes</span></p>
+
+  <h3>7. Instagram Feed Embed</h3>
+  <div class="layout-note">
+    6-8 latest Instagram posts in a grid. Shows freshness, leverages 120K following, provides social proof.
+  </div>
+
+  <h3>8. Upcoming Events Preview</h3>
+  <div class="layout-note">
+    1-2 upcoming event cards with date, venue, event type.
+  </div>
+  <p><span class="cta-note">View All Events</span> links to /events/</p>
+</div>
+
+<!-- 3. ABOUT -->
+<div class="section" id="page-about">
+  <h2>Page 2: About / My Story</h2>
+  <div class="section-subtitle">kishwar.com.au/about/</div>
+
+  <h3>1. Hero</h3>
+  <div class="layout-note">
+    Full-width professional headshot. Subtitle: Preserving Bengali heritage through food.
+  </div>
+
+  <h3>2. Heritage Narrative</h3>
+  <p><strong>Heading:</strong> Where It Begins | <strong>Voice:</strong> First person</p>
+  <div class="page-content">
+    I was born and raised in Melbourne to Bangladeshi parents. My father, Kamrul Chowdhury OAM, came from Bikrampur in East Bengal. My mother, Laila, from Burdwan in West Bengal. They built a life in Australia and became pillars of the Bangladeshi community in Victoria - and they built it around food.<br><br>
+    Every meal in our home was a lesson in who we are. My mother's kitchen was where I learned that food carries memory, identity, and belonging. A pot of khichuri on a rainy day was not just comfort - it was a connection to a country I had never lived in but somehow always knew.<br><br>
+    I studied commerce at Monash University, then graphic design at the University of the Arts London. I lived in Germany, then spent six years in Bangladesh building a business. When I returned to Melbourne in 2015, I came home to cooking.<br><br>
+    I staged at Ishizuka under Michelin-starred chef Masahiko Yomoda. I collaborated with Adam D'Sylva at TONKA on a modern Australian-Bengali menu. And in 2021, I walked onto the set of MasterChef Australia.
+  </div>
+
+  <h3>3. The MasterChef Story</h3>
+  <p><strong>Heading:</strong> MasterChef Australia</p>
+  <div class="page-content">
+    In the 2021 Grand Finale of MasterChef Australia Season 13, I cooked Smoked Rice Water - a modernised panta bhat, the fermented rice dish eaten by millions across Bengal. Judge Melissa Leong called it "powerful with history and powerful with flavour."<br><br>
+    I finished 3rd, but something bigger happened. That dish went viral across Bangladesh and India. People who had grown up eating panta bhat - a humble, everyday food - saw it presented as worthy of the world's attention. Mothers sent me messages saying their children finally wanted to eat Bengali food.<br><br>
+    That moment taught me what food can do. It can make people proud of where they come from.
+  </div>
+
+  <h3>4. Family</h3>
+  <p><strong>Heading:</strong> Family</p>
+  <div class="page-content">
+    My husband Ehtesham was my high school sweetheart. We have two children, Mikayle and Seraphina, who are growing up between two cultures - just like I did.<br><br>
+    Everything I cook has them in it. The recipes in my cookbook are the dishes I want them to know how to make when they are older. Food is how we pass things on.
+  </div>
+
+  <h3>5. What I Do</h3>
+  <p><strong>Heading:</strong> What I Do</p>
+  <div class="page-content">
+    Today I work as a chef, author, and speaker. My debut cookbook, <em>Smoke Rice Water</em>, publishes with Hardie Grant in June 2026 - 100 recipes from Bengal that show this cuisine as it really is: light, fragrant, layered, and deeply personal.<br><br>
+    I speak at events about heritage, food, cultural identity, and the migrant experience. I have delivered a TEDx talk, "Recipe for a Beautiful Mind," and serve as a Cricket Australia Multicultural Ambassador alongside Usman Khawaja, Mel Jones, and Wasim Akram.<br><br>
+    I am an ambassador for ASRC Feast for Freedom and have worked with World Vision Australia to support child sponsorship in Bangladesh.
+  </div>
+
+  <h3>6. Credentials Grid</h3>
+  <table>
+    <thead><tr><th>Credential</th><th>Type</th></tr></thead>
+    <tbody>
+      <tr><td>MasterChef Australia S13 Finalist</td><td>Television</td></tr>
+      <tr><td>TEDx Speaker - "Recipe for a Beautiful Mind"</td><td>Speaking</td></tr>
+      <tr><td>Cricket Australia Multicultural Ambassador</td><td>Ambassadorship</td></tr>
+      <tr><td>World Vision Australia Ambassador</td><td>Charity</td></tr>
+      <tr><td>ASRC Feast for Freedom Ambassador</td><td>Charity</td></tr>
+      <tr><td>Crown Melbourne - Chef in Residence</td><td>Dining</td></tr>
+      <tr><td>SBS Food - Presenter</td><td>Television</td></tr>
+      <tr><td>NGV - Signature Dishes</td><td>Cultural</td></tr>
+    </tbody>
+  </table>
+
+  <h3>7. Professional Headshot Download</h3>
+  <div class="layout-note">
+    "Download a hi-res headshot for press use" - links to /press/ or direct download.
+  </div>
+</div>
+
+<!-- 4. COLLABORATIONS -->
+<div class="section" id="page-collabs">
+  <h2>Page 3: Collaborations &amp; Partnerships</h2>
+  <div class="section-subtitle">kishwar.com.au/collaborations/</div>
+
+  <h3>1. Hero</h3>
+  <div class="page-content">
+    Kishwar Chowdhury brings Bengali food culture to Australian and global audiences through brand partnerships, keynote speaking, recipe development, and cultural consultancy. With 120K Instagram followers, 334K Facebook followers, and partnerships with Crown Melbourne, Cricket Australia, World Vision, and SBS Food, she offers brands an authentic connection to South Asian and multicultural Australian audiences.
+  </div>
+  <p><span class="cta-note">Start a Conversation</span> anchor to inquiry form</p>
+
+  <h3>2. Partner Logo Strip</h3>
+  <div class="layout-note">
+    <strong>Logos:</strong> Nymble | Crown Melbourne | Cricket Australia | World Vision Australia | ASRC | SBS Food | NGV | TEDx
+  </div>
+
+  <h3>3. Services (6 cards)</h3>
+  <table>
+    <thead><tr><th>Service</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Recipe Development</strong></td><td>Custom Bengali and South Asian recipes for brands, publications, and campaigns. Original photography and food styling included.</td></tr>
+      <tr><td><strong>Menu Consultancy</strong></td><td>Restaurant and event menu design for Bengali and South Asian cuisine. From concept to execution.</td></tr>
+      <tr><td><strong>Brand Ambassadorship</strong></td><td>Long-term brand representation reaching multicultural Australian, South Asian diaspora, and global food audiences.</td></tr>
+      <tr><td><strong>Content Creation</strong></td><td>Professional food photography, recipe video production, and social media content creation across Instagram, TikTok, and Facebook.</td></tr>
+      <tr><td><strong>Cultural Consultancy</strong></td><td>Bengali and South Asian food culture expertise for media, publishing, government, and corporate clients.</td></tr>
+      <tr><td><strong>Keynote Speaking</strong></td><td>Talks on heritage, food, cultural identity, the migrant experience, and Bengali cuisine in Australia. TEDx experience.</td></tr>
+    </tbody>
+  </table>
+
+  <h3>4. Audience Reach</h3>
+  <div class="stat-grid">
+    <div class="stat-card"><div class="stat-value">120K</div><div class="stat-label">Instagram</div></div>
+    <div class="stat-card"><div class="stat-value">334K</div><div class="stat-label">Facebook</div></div>
+    <div class="stat-card"><div class="stat-value">2,291</div><div class="stat-label">Twitter</div></div>
+  </div>
+  <div class="page-content">
+    Plus: MasterChef Australia national broadcast audience. Press coverage in SBS Food, marie claire, ICC, Daily Star Bangladesh, Dhaka Tribune.
+  </div>
+
+  <h3>5. Partner Portfolio</h3>
+  <table>
+    <thead><tr><th>Partner</th><th>Type</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Nymble</strong></td><td>Brand Ambassadorship</td><td>Smart cooking device partnership. Featured chef on eatwithnymble.com.</td></tr>
+      <tr><td><strong>Crown Melbourne</strong></td><td>Pop-up Dining</td><td>MasterChef Alumni pop-up (2024) - 4-course "Love Letter to Bangladesh" degustation. 3-week chef rotation (2025).</td></tr>
+      <tr><td><strong>Cricket Australia</strong></td><td>Multicultural Ambassador</td><td>Inaugural cohort alongside Usman Khawaja, Mel Jones, Wasim Akram, and Ravi Shastri.</td></tr>
+      <tr><td><strong>World Vision Australia</strong></td><td>Charity Ambassador</td><td>Bangladesh child sponsorship campaign. In-person visit to Bangladesh. Content creation.</td></tr>
+      <tr><td><strong>ASRC Feast for Freedom</strong></td><td>Ambassador</td><td>Ongoing ambassador since 2021. Annual fundraising event featuring refugee and migrant food stories.</td></tr>
+      <tr><td><strong>SBS Food</strong></td><td>Television &amp; Editorial</td><td>Diwali series (2023) - 4 episodes. Editorial recipe features.</td></tr>
+      <tr><td><strong>NGV</strong></td><td>Cultural Event</td><td>Signature Dishes by Kishwar Chowdhury program at the National Gallery of Victoria.</td></tr>
+      <tr><td><strong>TEDx</strong></td><td>Keynote Speaking</td><td>"Recipe for a Beautiful Mind" - talk on food as memory, pride, and heritage.</td></tr>
+    </tbody>
+  </table>
+
+  <h3>6. Cookbook Launch Partnerships - June 2026</h3>
+  <div class="page-content">
+    Kishwar's debut cookbook <em>Smoke Rice Water</em> publishes with Hardie Grant on 23 June 2026. Partnership opportunities include:<br><br>
+    - Co-branded cookbook bundles with kitchen and food brands<br>
+    - Launch event sponsorships (Melbourne, Sydney, June-July 2026)<br>
+    - Exclusive recipe features and media tie-ins<br>
+    - Retail partnerships with Dymocks, Readings, and independent bookstores
+  </div>
+
+  <h3>7. Speaking Topics</h3>
+  <ul>
+    <li>Preserving heritage through food: Bengali cuisine and the diaspora experience</li>
+    <li>From MasterChef to the world: building a food career outside restaurants</li>
+    <li>Recipe for a Beautiful Mind: food as memory, pride, and identity</li>
+    <li>Bengali cuisine: the 200-million-person food story the world hasn't heard</li>
+    <li>Second-generation migrant identity: cooking between two cultures</li>
+  </ul>
+
+  <h3>8. Testimonials</h3>
+  <div class="layout-note">
+    <strong>Placeholder:</strong> 2-3 quotes from past brand partners and event organisers. These need to be collected from actual partners.
+  </div>
+
+  <h3>9. Professional Inquiry Form</h3>
+  <div class="layout-note">
+    <strong>Form fields:</strong><br>
+    - Your name (required)<br>
+    - Company / Organisation (required)<br>
+    - Email (required)<br>
+    - Inquiry type (dropdown): Brand Partnership | Speaking &amp; Events | Recipe Development | Media &amp; Press | Cookbook Launch | Other<br>
+    - Project timeline (dropdown): Within 1 month | 1-3 months | 3-6 months | Flexible<br>
+    - Message (text area)<br><br>
+    <strong>Routing:</strong> Brand Partnership and Speaking inquiries flagged as high-priority. All inquiries sent to hello@kishwar.com.au.
+  </div>
+  <p><span class="cta-note">Send Inquiry</span></p>
+</div>
+
+<!-- 5. COOKBOOK -->
+<div class="section" id="page-book">
+  <h2>Page 4: Cookbook - "Smoke Rice Water"</h2>
+  <div class="section-subtitle">kishwar.com.au/book/</div>
+
+  <h3>1. Hero</h3>
+  <div class="layout-note">
+    Large book cover image (left) + text (right). Subtitle: Recipes and Stories from a Bengali Home.
+  </div>
+
+  <h3>2. Synopsis</h3>
+  <p><strong>Heading:</strong> About the Book</p>
+  <div class="page-content">
+    Bengali food feeds over 200 million people across Bangladesh and the Indian state of West Bengal. It is one of the most complex, fragrant, and layered cuisines in the world - and one of the most underrepresented in English-language cookbooks.<br><br>
+    <em>Smoke Rice Water</em> brings 100 recipes from the Bengali kitchen into your home. Street snacks from the lanes of Dhaka. Mughal court dishes slow-cooked with centuries of technique. Fish stews that define the riverlands of Bengal. Sweets that mark every celebration. And the everyday meals that Kishwar's mother and grandmother made in their Melbourne kitchen - the recipes that kept a family connected to a country 12,000 kilometres away.<br><br>
+    This is not a book about exotic food. It is a book about home.
+  </div>
+
+  <h3>3. The Story Behind the Name</h3>
+  <p><strong>Heading:</strong> Why "Smoke Rice Water"?</p>
+  <div class="page-content">
+    In the 2021 Grand Finale of MasterChef Australia, Kishwar cooked a dish called Smoked Rice Water - a modernised version of panta bhat, the traditional Bengali fermented rice eaten by farmers and families across Bangladesh for centuries.<br><br>
+    Panta bhat is the simplest of foods: leftover rice soaked in water overnight, served with fried fish, green chillies, and onion. It is not a dish that wins competitions. But in Kishwar's hands, it did something more important - it made millions of people proud of their everyday food.<br><br>
+    The name of this cookbook honours that moment, that dish, and that idea: the most ordinary ingredients can carry extraordinary meaning.
+  </div>
+
+  <h3>4. Sample Recipes</h3>
+  <div class="layout-note">
+    2-3 recipe previews from the book with photo and brief description. "Get the Recipe" links to full recipes on /recipes/ if published.
+  </div>
+
+  <h3>5. Author Note</h3>
+  <p><strong>Heading:</strong> A Note from Kishwar | <strong>Voice:</strong> First person</p>
+  <div class="page-content">
+    I wrote this book for my children. I wanted them to have a record of the food I grew up eating - the dishes my mother made without measuring, the recipes my grandmother knew by feel.<br><br>
+    But I also wrote it for every Bengali family that has ever been told their food is "too simple" or "too unfamiliar." Bengali cuisine is neither. It is one of the most sophisticated food traditions in the world. This book is my attempt to show that.<br><br>
+    I hope you cook from it, share it, and make these recipes your own.
+  </div>
+
+  <h3>6. Book Details &amp; Purchase</h3>
+  <table>
+    <thead><tr><th>Detail</th><th>Value</th></tr></thead>
+    <tbody>
+      <tr><td>Publisher</td><td>Hardie Grant Books</td></tr>
+      <tr><td>Format</td><td>Hardcover</td></tr>
+      <tr><td>Release date</td><td>23 June 2026</td></tr>
+      <tr><td>ISBN</td><td>9781743799345</td></tr>
+      <tr><td>Recipes</td><td>100</td></tr>
+    </tbody>
+  </table>
+  <p><strong>Purchase options:</strong> Signed copy (exclusive to kishwar.com.au) [primary CTA], Booktopia, Amazon Australia, Dymocks, Readings, Hardie Grant</p>
+  <p><span class="cta-note">Pre-order Signed Copy</span></p>
+
+  <h3>7. Press Quotes &amp; Endorsements</h3>
+  <div class="layout-note">
+    <strong>Placeholder:</strong> Publisher endorsements, early reviews, and press quotes. These will become available closer to launch.
+  </div>
+
+  <h3>8. Newsletter Signup</h3>
+  <div class="page-content">
+    Be the first to know about book launch events, signed copies, and exclusive recipes from the book.
+  </div>
+  <p><span class="cta-note">Sign Up for Updates</span></p>
+</div>
+
+<!-- 6. RECIPES -->
+<div class="section" id="page-recipes">
+  <h2>Page 5: Recipes</h2>
+  <div class="section-subtitle">kishwar.com.au/recipes/</div>
+
+  <h3>Introduction</h3>
+  <div class="page-content">
+    Bengali cooking is built on layers - of spice, of technique, of story. These recipes come from my kitchen, my mother's kitchen, and the kitchens of Bangladesh and Bengal. Each one is written in clear English with metric and imperial measurements, ingredient substitutions where needed, and the story behind the dish.<br><br>
+    Whether you are Bengali and looking for the recipes you grew up eating, or discovering this cuisine for the first time, these recipes are for you.
+  </div>
+
+  <h3>8 Recipe Categories</h3>
+  <table>
+    <thead><tr><th>Category</th><th>URL</th><th>Example Dishes</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Bengali Classics</strong></td><td>/recipes/category/bengali-classics/</td><td>Panta bhat, kala bhuna, khichuri, dal</td></tr>
+      <tr><td><strong>Street Food</strong></td><td>/recipes/category/street-food/</td><td>Fuchka, chotpoti, jhal muri, shingara</td></tr>
+      <tr><td><strong>Fish &amp; Seafood</strong></td><td>/recipes/category/fish-seafood/</td><td>Mach bhaja, shorshe ilish, chingri malai curry</td></tr>
+      <tr><td><strong>Meat Dishes</strong></td><td>/recipes/category/meat/</td><td>Khashir rezala, goat nihari, kacchi biriyani</td></tr>
+      <tr><td><strong>Quick Weeknight</strong></td><td>/recipes/category/quick-weeknight/</td><td>30-minute Bengali meals, egg curry, dal</td></tr>
+      <tr><td><strong>Rice &amp; Breads</strong></td><td>/recipes/category/rice-breads/</td><td>Porota, naan nawabi, polao, luchi</td></tr>
+      <tr><td><strong>Sweets &amp; Desserts</strong></td><td>/recipes/category/sweets/</td><td>Mishti doi, roshogolla, shemai, pitha</td></tr>
+      <tr><td><strong>Fusion &amp; Modern</strong></td><td>/recipes/category/fusion/</td><td>Hot cross bun x shahi tukra, modern Bengali</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Recipe Page Template</h3>
+  <p>Every individual recipe page should follow this structure from top to bottom:</p>
+  <div class="page-card">
+    <h4>Above the Fold</h4>
+    <ul>
+      <li>Jump to Recipe button</li>
+      <li>Hero image - original photography</li>
+      <li>Recipe Name (heading)</li>
+      <li>Quick stats bar: Prep Time | Cook Time | Servings | Difficulty</li>
+      <li>Author byline: "By Kishwar Chowdhury" with photo and link to /about/</li>
+      <li>Date published</li>
+    </ul>
+
+    <h4>About This Dish</h4>
+    <ul>
+      <li>Cultural context and personal story (150-300 words)</li>
+      <li>Why this dish matters in Bengali food culture</li>
+      <li>Kishwar's personal connection to the recipe</li>
+      <li>1-2 process photos or ingredient flat-lay</li>
+    </ul>
+
+    <h4>Ingredients</h4>
+    <ul>
+      <li>Structured ingredient list with quantities</li>
+      <li>Sub-groups if needed ("For the marinade", "For the sauce")</li>
+      <li>Substitution notes for hard-to-find ingredients</li>
+    </ul>
+
+    <h4>Step-by-Step Instructions</h4>
+    <ul>
+      <li>Numbered steps with process photos at key stages</li>
+      <li>Clear visual cues for doneness at each step</li>
+      <li>Tips embedded within steps where relevant</li>
+    </ul>
+
+    <h4>Tips for Perfect Results</h4>
+    <ul>
+      <li>3-5 practical cooking tips</li>
+      <li>Common mistakes and how to avoid them</li>
+      <li>Storage and reheating instructions</li>
+    </ul>
+
+    <h4>FAQ</h4>
+    <ul>
+      <li>3-5 Q&amp;As specific to this dish</li>
+    </ul>
+
+    <h4>More Bengali Recipes</h4>
+    <ul>
+      <li>3-5 related recipe cards with images and links</li>
+    </ul>
+
+    <h4>Page Footer Elements</h4>
+    <ul>
+      <li>Star rating + review submission form</li>
+      <li>Social sharing buttons</li>
+      <li>Newsletter signup: "Get more Bengali recipes delivered to your inbox"</li>
+      <li>Comments section</li>
+    </ul>
+  </div>
+
+  <h3>Launch Recipes (20)</h3>
+  <p>Priority recipes to publish first:</p>
+  <table>
+    <thead><tr><th>#</th><th>Recipe</th><th>Category</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td><strong>Panta Bhat (Smoked Rice Water)</strong></td><td>Bengali Classics</td></tr>
+      <tr><td>2</td><td><strong>Khichuri</strong></td><td>Bengali Classics</td></tr>
+      <tr><td>3</td><td><strong>Kala Bhuna</strong></td><td>Meat Dishes</td></tr>
+      <tr><td>4</td><td><strong>Fuchka</strong></td><td>Street Food</td></tr>
+      <tr><td>5</td><td><strong>Shorshe Ilish</strong></td><td>Fish &amp; Seafood</td></tr>
+      <tr><td>6</td><td><strong>Mach Bhaja</strong></td><td>Fish &amp; Seafood</td></tr>
+      <tr><td>7</td><td><strong>Mishti Doi</strong></td><td>Sweets &amp; Desserts</td></tr>
+      <tr><td>8</td><td><strong>Khashir Rezala</strong></td><td>Meat Dishes</td></tr>
+      <tr><td>9</td><td><strong>Goat Nihari</strong></td><td>Meat Dishes</td></tr>
+      <tr><td>10</td><td><strong>Bengali Egg Curry</strong></td><td>Quick Weeknight</td></tr>
+      <tr><td>11</td><td><strong>Porota</strong></td><td>Rice &amp; Breads</td></tr>
+      <tr><td>12</td><td><strong>Chotpoti</strong></td><td>Street Food</td></tr>
+      <tr><td>13</td><td><strong>Dim Bhaji</strong></td><td>Quick Weeknight</td></tr>
+      <tr><td>14</td><td><strong>Chingri Malai Curry</strong></td><td>Fish &amp; Seafood</td></tr>
+      <tr><td>15</td><td><strong>Shemai</strong></td><td>Sweets &amp; Desserts</td></tr>
+      <tr><td>16</td><td><strong>Hot Cross Bun x Shahi Tukra</strong></td><td>Fusion &amp; Modern</td></tr>
+      <tr><td>17</td><td><strong>Bengali Fish Curry (generic)</strong></td><td>Fish &amp; Seafood</td></tr>
+      <tr><td>18</td><td><strong>Luchi</strong></td><td>Rice &amp; Breads</td></tr>
+      <tr><td>19</td><td><strong>Doi Maach</strong></td><td>Fish &amp; Seafood</td></tr>
+      <tr><td>20</td><td><strong>Begun Bhaja</strong></td><td>Quick Weeknight</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- 7. EVENTS -->
+<div class="section" id="page-events">
+  <h2>Page 6: Events</h2>
+  <div class="section-subtitle">kishwar.com.au/events/</div>
+
+  <h3>1. Upcoming Events</h3>
+  <div class="layout-note">
+    Event cards with: date, event name, venue, event type badge, brief description, ticket link.<br><br>
+    <strong>Event types:</strong> Pop-up dinners, Cooking classes, Cookbook launch events, Festival appearances, Speaking engagements, Brand events
+  </div>
+
+  <h3>2. Cookbook Launch Section</h3>
+  <p><strong>Heading:</strong> Smoke Rice Water - Launch Events | June 2026</p>
+  <div class="layout-note">
+    Dedicated section highlighting all cookbook launch events.
+  </div>
+  <p><span class="cta-note">Get Tickets</span></p>
+
+  <h3>3. Past Events Gallery</h3>
+  <div class="layout-note">
+    Photo grid with captions. Feature: Crown Melbourne pop-up, NGV Signature Dishes, TEDx, Melbourne Asia Game Changer Awards 2025, Feast for Freedom.
+  </div>
+
+  <h3>4. Newsletter Tie-in</h3>
+  <div class="page-content">
+    Get early access to event tickets and announcements.
+  </div>
+  <p><span class="cta-note">Join the Mailing List</span></p>
+</div>
+
+<!-- 8. PRESS -->
+<div class="section" id="page-press">
+  <h2>Page 7: Press &amp; Media</h2>
+  <div class="section-subtitle">kishwar.com.au/press/</div>
+
+  <h3>1. Press Logo Strip</h3>
+  <div class="layout-note">
+    <strong>Logos:</strong> SBS Food | marie claire | MasterChef / Network 10 | TEDx | ICC Cricket | Daily Star Bangladesh
+  </div>
+
+  <h3>2. Media Appearances</h3>
+  <h4>Television</h4>
+  <ul>
+    <li>MasterChef Australia Season 13 (2021) - Network 10</li>
+    <li>SBS Food Diwali Series (2023) - 4 episodes</li>
+  </ul>
+  <h4>Speaking</h4>
+  <ul>
+    <li>TEDx - "Recipe for a Beautiful Mind"</li>
+  </ul>
+  <h4>Print &amp; Digital</h4>
+  <ul>
+    <li>SBS Food - multiple features and editorial recipes</li>
+    <li>marie claire Australia</li>
+    <li>ICC Cricket</li>
+    <li>Daily Star Bangladesh</li>
+    <li>Dhaka Tribune</li>
+  </ul>
+
+  <h3>3. Downloadable Press Kit</h3>
+  <div class="layout-note">
+    One-click PDF download containing:<br>
+    - Hi-res headshots (2-3 options, portrait and landscape)<br>
+    - Food photography (5-10 hero images from cookbook/events)<br>
+    - Short bio (100 words)<br>
+    - Long bio (300 words)<br>
+    - Key facts sheet (social stats, credentials, contact)<br>
+    - Book information (Smoke Rice Water - cover, synopsis, ISBN, release date)
+  </div>
+  <p><span class="cta-note">Download Press Kit (PDF)</span></p>
+
+  <h3>4. Bios</h3>
+  <h4>Short Bio (100 words)</h4>
+  <div class="page-content">
+    Kishwar Chowdhury is a Bangladeshi-Australian chef, author, and speaker based in Melbourne. She finished 3rd on MasterChef Australia Season 13 (2021), where her Grand Finale dish "Smoked Rice Water" - a modernised panta bhat - went viral across Bangladesh and India. A TEDx speaker and Cricket Australia Multicultural Ambassador, Kishwar is dedicated to preserving Bengali heritage through food. Her debut cookbook, <em>Smoke Rice Water: Recipes and Stories from a Bengali Home</em>, publishes with Hardie Grant in June 2026. She is an ambassador for ASRC Feast for Freedom and World Vision Australia.
+  </div>
+
+  <h4>Long Bio (300 words)</h4>
+  <div class="page-content">
+    Kishwar Chowdhury is a Bangladeshi-Australian chef, author, and speaker based in Melbourne, Victoria. Born and raised in Melbourne to Bangladeshi parents, Kishwar grew up in a household where food was the primary language of identity and belonging.<br><br>
+    Her father, Kamrul Chowdhury OAM, migrated from Bikrampur in East Bengal. Her mother, Laila, from Burdwan in West Bengal. Together they became pillars of the Bangladeshi community in Victoria, and it was in Laila's kitchen that Kishwar first learned to cook - and first understood that food carries memory, pride, and connection to home.<br><br>
+    Kishwar studied commerce at Monash University, then graphic design at the University of the Arts London. She lived in Germany before spending six years in Bangladesh, where she ran a printing and promotional products business. After returning to Melbourne in 2015, she turned to cooking professionally - staging at Ishizuka under Michelin-starred chef Masahiko Yomoda and collaborating with Adam D'Sylva at TONKA on a modern Australian-Bengali menu.<br><br>
+    In 2021, Kishwar competed on MasterChef Australia Season 13 and finished 3rd. Her Grand Finale dish, Smoked Rice Water - a modernised version of panta bhat, the humble fermented rice eaten by millions across Bengal - went viral across Bangladesh and India. Judge Melissa Leong called it "powerful with history and powerful with flavour." The dish made international headlines and gave millions of Bengali people a moment of deep cultural pride.<br><br>
+    Since MasterChef, Kishwar has delivered a TEDx talk ("Recipe for a Beautiful Mind"), served as a Cricket Australia Multicultural Ambassador alongside Usman Khawaja, and cooked at Crown Melbourne as chef in residence. She is an ambassador for ASRC Feast for Freedom and World Vision Australia.<br><br>
+    She lives in Melbourne with her husband Ehtesham and their two children, Mikayle and Seraphina. Her debut cookbook, <em>Smoke Rice Water: Recipes and Stories from a Bengali Home</em>, publishes with Hardie Grant on 23 June 2026.
+  </div>
+
+  <h3>5. Press Contact</h3>
+  <ul>
+    <li><strong>General press inquiries:</strong> hello@kishwar.com.au</li>
+    <li><strong>Book publicity:</strong> Hardie Grant publicist contact (if available)</li>
+    <li><strong>Speaking inquiries:</strong> See Collaborations page</li>
+  </ul>
+</div>
+
+<!-- 9. BLOG -->
+<div class="section" id="page-blog">
+  <h2>Page 8: Blog / Stories</h2>
+  <div class="section-subtitle">kishwar.com.au/blog/</div>
+
+  <h3>6 Content Pillars</h3>
+  <table>
+    <thead><tr><th>Pillar</th><th>Example Posts</th><th>Frequency</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Bengali Food Culture</strong></td><td>"What is Panta Bhat? The History of Fermented Rice"</td><td>Monthly</td></tr>
+      <tr><td><strong>Family Stories</strong></td><td>"My Mother's Shemai: A Recipe and a Memory"</td><td>Monthly</td></tr>
+      <tr><td><strong>Ingredient Spotlights</strong></td><td>"A Guide to Panch Phoron: Bengal's Five-Spice Blend"</td><td>Monthly</td></tr>
+      <tr><td><strong>Behind the Cookbook</strong></td><td>"Writing Smoke Rice Water: Chapter by Chapter"</td><td>As needed</td></tr>
+      <tr><td><strong>Travel &amp; Heritage</strong></td><td>"Bikrampur to Melbourne: My Family's Food Journey"</td><td>Quarterly</td></tr>
+      <tr><td><strong>Event Recaps</strong></td><td>"Cooking at Crown: A Love Letter to Bangladesh"</td><td>After events</td></tr>
+    </tbody>
+  </table>
+
+  <p><strong>Posting cadence:</strong> 2-4 posts per month. Every post should embed a recipe or link to a recipe page.</p>
+
+  <h3>Blog Post Template</h3>
+  <div class="layout-note">
+    <strong>Structure for every blog post:</strong><br>
+    - Featured image (original photography)<br>
+    - Post title<br>
+    - Author byline with photo and link to /about/<br>
+    - Date published | Estimated read time<br>
+    - Introduction hook paragraph<br>
+    - Body content: subheadings, 800-2,000 words<br>
+    - Embedded recipe link or recipe card<br>
+    - Related Reading: 2-3 links to related blog posts and recipe pages<br>
+    - Author bio box: photo, name, 2-line bio, link to /about/<br>
+    - Social sharing buttons<br>
+    - Newsletter signup<br>
+    - Comments section
+  </div>
+
+  <h3>Priority Launch Posts (first 3)</h3>
+  <ol>
+    <li><strong>"What is Panta Bhat? The History of Fermented Rice"</strong> - pillar content, owns this search</li>
+    <li><strong>"A Guide to Panch Phoron: Bengal's Five-Spice Blend"</strong> - evergreen ingredient guide</li>
+    <li><strong>"Writing Smoke Rice Water: What Bengali Food Means to Me"</strong> - book launch tie-in</li>
+  </ol>
+</div>
+
+<!-- 10. NEWSLETTER -->
+<div class="section" id="page-newsletter">
+  <h2>Page 9: Newsletter</h2>
+  <div class="section-subtitle">kishwar.com.au/newsletter/</div>
+
+  <h3>Hero</h3>
+  <div class="page-content">
+    <em>Recipes and Stories from the Bengali Kitchen</em><br><br>
+    Join the mailing list for monthly recipes, behind-the-scenes stories, event announcements, and exclusive content from Kishwar's kitchen.
+  </div>
+
+  <h3>Lead Magnet</h3>
+  <h4>Your free download: 5 Bengali Heritage Recipes</h4>
+  <div class="page-content">
+    When you sign up, you will receive a PDF with 5 of Kishwar's favourite Bengali recipes - each with step-by-step instructions, original photography, and the story behind the dish. These are recipes you will not find anywhere else online.
+  </div>
+  <div class="layout-note">
+    <strong>Form fields:</strong> First name, email address
+  </div>
+  <p><span class="cta-note">Send Me the Recipes</span></p>
+
+  <h3>What You Will Get</h3>
+  <ul>
+    <li>Monthly recipe delivered to your inbox</li>
+    <li>Early access to event tickets and cookbook news</li>
+    <li>Behind-the-scenes stories from the Bengali kitchen</li>
+    <li>Exclusive recipes not published on the website</li>
+  </ul>
+
+  <h3>Welcome Sequence (automated, 3 emails)</h3>
+  <table>
+    <thead><tr><th>Email</th><th>Timing</th><th>Content</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Email 1</strong></td><td>Immediate</td><td>Welcome + personal story + recipe PDF download link</td></tr>
+      <tr><td><strong>Email 2</strong></td><td>Day 3</td><td>"My Favourite Bengali Recipes" - links to 3 recipes on the website</td></tr>
+      <tr><td><strong>Email 3</strong></td><td>Day 7</td><td>Cookbook information + upcoming event announcement + invite to follow on Instagram</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- 11. CONTACT -->
+<div class="section" id="page-contact">
+  <h2>Page 10: Contact</h2>
+  <div class="section-subtitle">kishwar.com.au/contact/</div>
+
+  <h3>1. Contact Form</h3>
+  <div class="layout-note">
+    <strong>Form fields:</strong><br>
+    - Your name (required)<br>
+    - Email (required)<br>
+    - Inquiry type (dropdown): Speaking | Brand Partnership | Media | Events | Cookbook | General<br>
+    - Message (text area)<br><br>
+    <strong>Routing:</strong> Speaking and Brand Partnership inquiries flagged as high-priority.
+  </div>
+  <p><span class="cta-note">Send Message</span></p>
+
+  <h3>2. Direct Contact</h3>
+  <ul>
+    <li><strong>Email:</strong> hello@kishwar.com.au</li>
+    <li><strong>For speaking and brand partnerships:</strong> See the Collaborations page</li>
+  </ul>
+
+  <h3>3. Social Links</h3>
+  <ul>
+    <li>Instagram: @kishwar_chowdhury</li>
+    <li>Facebook: @kishwarmasterchef</li>
+    <li>X / Twitter: @Kishjustathome</li>
+    <li>LinkedIn: /in/kishwar-chowdhury-57bbba168</li>
+  </ul>
+
+  <h3>4. Frequently Asked Questions</h3>
+  <div class="page-card">
+    <h4>Do you do private dining?</h4>
+    <p>Kishwar offers pop-up dining experiences and private events through select venues. For private dining inquiries, please use the contact form above and select "Events" as the inquiry type.</p>
+
+    <h4>How do I book you for an event or speaking engagement?</h4>
+    <p>Visit the Collaborations page for a full list of services and the partnership inquiry form. For time-sensitive inquiries, email hello@kishwar.com.au directly.</p>
+
+    <h4>Where can I buy the cookbook?</h4>
+    <p><em>Smoke Rice Water</em> publishes on 23 June 2026 with Hardie Grant. Pre-order signed copies (exclusive to kishwar.com.au) or from Booktopia, Amazon, Dymocks, and Readings. Visit the Book page for all purchase options.</p>
+
+    <h4>Do you offer cooking classes?</h4>
+    <p>Cooking class availability will be announced via the newsletter and Events page. Sign up for the mailing list to be notified first.</p>
+
+    <h4>Can I use your recipes on my website or in my publication?</h4>
+    <p>All recipes and content on this website are copyright Kishwar Chowdhury. For licensing, syndication, or collaboration inquiries, please use the contact form.</p>
+  </div>
+</div>
+
+</div>
+</main>
+
+<script>
+const navItems = document.querySelectorAll('.nav-item[data-section]');
+const sections = document.querySelectorAll('.section');
+
+navItems.forEach(item => {
+  item.addEventListener('click', () => {
+    const target = item.dataset.section;
+
+    navItems.forEach(n => n.classList.remove('active'));
+    item.classList.add('active');
+
+    sections.forEach(s => s.classList.remove('active'));
+    document.getElementById(target).classList.add('active');
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    if (window.innerWidth <= 860) {
+      document.getElementById('sidebar').classList.remove('open');
+      document.getElementById('overlay').classList.remove('open');
+    }
+  });
+});
+
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('overlay').classList.toggle('open');
+}
+
+// Build prev/next navigation buttons
+const sectionOrder = Array.from(document.querySelectorAll('.nav-item[data-section]')).map(n => ({
+  id: n.dataset.section,
+  label: n.textContent.replace(/^\d\s*/, '').trim()
+}));
+
+function goTo(sectionId) {
+  const item = document.querySelector('.nav-item[data-section="' + sectionId + '"]');
+  if (item) item.click();
+}
+
+sectionOrder.forEach((sec, i) => {
+  const el = document.getElementById(sec.id);
+  if (!el) return;
+  const nav = document.createElement('div');
+  nav.className = 'section-nav';
+  let html = '';
+  if (i > 0) {
+    const prev = sectionOrder[i - 1];
+    html += '<button class="nav-btn prev" onclick="goTo(\'' + prev.id + '\')"><span class="arrow">&larr;</span> ' + prev.label + '</button>';
+  }
+  if (i < sectionOrder.length - 1) {
+    const next = sectionOrder[i + 1];
+    html += '<button class="nav-btn next" onclick="goTo(\'' + next.id + '\')">' + next.label + ' <span class="arrow">&rarr;</span></button>';
+  }
+  nav.innerHTML = html;
+  el.appendChild(nav);
+});
+</script>
+</body>
+</html>

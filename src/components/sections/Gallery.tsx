@@ -64,8 +64,8 @@ const galleryItems: GalleryItem[] = [
   },
   // Row 3
   {
-    src: "https://static.wixstatic.com/media/a338cb_312b12466f414ed2b7be48cca1e2fd51~mv2.png",
-    alt: "Press feature.",
+    src: images.pressNetwork10.src,
+    alt: images.pressNetwork10.alt,
     caption: "Editorial Feature",
     span: "col-span-12 md:col-span-7",
     aspect: "aspect-[7/5]",
@@ -79,8 +79,8 @@ const galleryItems: GalleryItem[] = [
   },
   // Row 4 — wide banner
   {
-    src: "https://static.wixstatic.com/media/a338cb_a932c7ae0c1b425ebe949b98d26920b2~mv2.png",
-    alt: "Press cover story.",
+    src: images.pressDailyStar.src,
+    alt: images.pressDailyStar.alt,
     caption: "Cover Story",
     span: "col-span-12",
     aspect: "aspect-[16/5]",

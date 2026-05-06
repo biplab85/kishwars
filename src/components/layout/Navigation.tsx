@@ -1,20 +1,31 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { text } from "@/content/text";
 import { cn } from "@/lib/utils/cn";
 import { Logo } from "@/components/layout/Logo";
 
 export function Navigation() {
+  const pathname = usePathname();
+  const isHome = pathname === "/";
   const [scrolled, setScrolled] = useState(false);
   const [active, setActive] = useState<string>("top");
   const [open, setOpen] = useState(false);
 
-  const { items, channelCta } = text.nav;
+  const HIDDEN_FROM_HEADER = ["Story", "Videos", "Press", "Cookbook", "Newsletter"];
+  const items = text.nav.items.filter(
+    (item) => !HIDDEN_FROM_HEADER.includes(item.label),
+  );
+  const { channelCta } = text.nav;
 
-  // Scroll-spy via IntersectionObserver
+  // Scroll-spy via IntersectionObserver (only meaningful on the home page)
   useEffect(() => {
-    const ids = items.map((i) => i.href.replace("#", ""));
+    if (!isHome) return;
+    const ids = items
+      .filter((i) => i.href.startsWith("#"))
+      .map((i) => i.href.slice(1));
     const targets = ids
       .map((id) => document.getElementById(id))
       .filter((el): el is HTMLElement => el !== null);
@@ -32,7 +43,7 @@ export function Navigation() {
 
     targets.forEach((t) => obs.observe(t));
     return () => obs.disconnect();
-  }, [items]);
+  }, [items, isHome]);
 
   // Solid bar after scroll
   useEffect(() => {
@@ -74,39 +85,55 @@ export function Navigation() {
         )}
       >
         <div className="mx-auto flex max-w-[1400px] items-center justify-between px-6 md:px-10">
-          <a
-            href="#top"
-            onClick={handleAnchor("#top")}
-            aria-label="Kishwar — back to top"
-            className="inline-block"
-          >
-            <Logo size="sm" />
-          </a>
+          {isHome ? (
+            <a
+              href="#top"
+              onClick={handleAnchor("#top")}
+              aria-label="Kishwar — back to top"
+              className="inline-block"
+            >
+              <Logo size="sm" />
+            </a>
+          ) : (
+            <Link href="/" aria-label="Kishwar — home" className="inline-block">
+              <Logo size="sm" />
+            </Link>
+          )}
 
           {/* Desktop nav */}
           <nav className="hidden lg:block" aria-label="Primary">
             <ul className="flex items-center gap-1">
               {items.map((item) => {
-                const isActive = `#${active}` === item.href;
+                const isHash = item.href.startsWith("#");
+                const isActive = isHome
+                  ? isHash && `#${active}` === item.href
+                  : !isHash && pathname === item.href;
+                const className = cn(
+                  "relative inline-block px-4 py-2 text-[11px] tracking-[0.32em] uppercase transition-colors duration-300",
+                  isActive ? "text-cream" : "text-cream/60 hover:text-cream",
+                );
+                const underline = (
+                  <span
+                    aria-hidden
+                    className={cn(
+                      "absolute left-4 right-4 -bottom-0.5 h-px origin-left transition-transform duration-500 ease-cinematic",
+                      isActive ? "scale-x-100 bg-saffron" : "scale-x-0 bg-cream/40",
+                    )}
+                  />
+                );
                 return (
                   <li key={item.href}>
-                    <a
-                      href={item.href}
-                      onClick={handleAnchor(item.href)}
-                      className={cn(
-                        "relative inline-block px-4 py-2 text-[11px] tracking-[0.32em] uppercase transition-colors duration-300",
-                        isActive ? "text-cream" : "text-cream/60 hover:text-cream",
-                      )}
-                    >
-                      {item.label}
-                      <span
-                        aria-hidden
-                        className={cn(
-                          "absolute left-4 right-4 -bottom-0.5 h-px origin-left transition-transform duration-500 ease-cinematic",
-                          isActive ? "scale-x-100 bg-saffron" : "scale-x-0 bg-cream/40",
-                        )}
-                      />
-                    </a>
+                    {isHash && isHome ? (
+                      <a href={item.href} onClick={handleAnchor(item.href)} className={className}>
+                        {item.label}
+                        {underline}
+                      </a>
+                    ) : (
+                      <Link href={isHash ? `/${item.href}` : item.href} className={className}>
+                        {item.label}
+                        {underline}
+                      </Link>
+                    )}
                   </li>
                 );
               })}
@@ -166,29 +193,55 @@ export function Navigation() {
         <div className="flex h-full flex-col px-6 pt-28">
           <nav aria-label="Primary mobile">
             <ul className="flex flex-col gap-2">
-              {items.map((item, i) => (
-                <li key={item.href}>
-                  <a
-                    href={item.href}
-                    onClick={handleAnchor(item.href)}
-                    className="block py-3 font-display text-cream"
-                    style={{
-                      fontSize: "clamp(2rem, 9vw, 3.5rem)",
-                      lineHeight: 1.05,
-                      letterSpacing: "-0.02em",
-                      transitionDelay: open ? `${i * 60}ms` : "0ms",
-                      opacity: open ? 1 : 0,
-                      transform: open ? "translateY(0)" : "translateY(20px)",
-                      transition: "opacity 0.6s ease, transform 0.6s ease",
-                    }}
-                  >
+              {items.map((item, i) => {
+                const isHash = item.href.startsWith("#");
+                const isActive = isHome
+                  ? isHash && `#${active}` === item.href
+                  : !isHash && pathname === item.href;
+                const className = "block py-3 font-display text-cream";
+                const style = {
+                  fontSize: "clamp(2rem, 9vw, 3.5rem)",
+                  lineHeight: 1.05,
+                  letterSpacing: "-0.02em",
+                  opacity: open ? 1 : 0,
+                  transform: open ? "translateY(0)" : "translateY(20px)",
+                  transitionProperty: "opacity, transform",
+                  transitionDuration: "0.6s, 0.6s",
+                  transitionTimingFunction: "ease, ease",
+                  transitionDelay: open ? `${i * 60}ms` : "0ms",
+                } as const;
+                const inner = (
+                  <>
                     {item.label}
-                    {`#${active}` === item.href && (
+                    {isActive && (
                       <span aria-hidden className="ml-3 text-saffron">·</span>
                     )}
-                  </a>
-                </li>
-              ))}
+                  </>
+                );
+                return (
+                  <li key={item.href}>
+                    {isHash && isHome ? (
+                      <a
+                        href={item.href}
+                        onClick={handleAnchor(item.href)}
+                        className={className}
+                        style={style}
+                      >
+                        {inner}
+                      </a>
+                    ) : (
+                      <Link
+                        href={isHash ? `/${item.href}` : item.href}
+                        onClick={() => setOpen(false)}
+                        className={className}
+                        style={style}
+                      >
+                        {inner}
+                      </Link>
+                    )}
+                  </li>
+                );
+              })}
             </ul>
           </nav>
           <div className="mt-auto pb-12">

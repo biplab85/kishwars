@@ -30,7 +30,7 @@ const featuredVideos = [
   category: v.outlet.split(" · ")[0] ?? v.outlet,
   duration: ["12:34", "15:22", "18:45", "14:18", "16:52"][i % 5],
   views: ["150K", "285K", "198K", "124K", "167K"][i % 5],
-  thumbnail: `https://img.youtube.com/vi/${v.id}/maxresdefault.jpg`,
+  thumbnail: `/images/yt-${v.id}.jpg`,
 }));
 
 export function FeaturedVideos() {
