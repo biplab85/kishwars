@@ -100,3 +100,19 @@
     will-change: transform;
   }
 }
+
+/* Editorial drop cap — used on the opening paragraph of blog essays. */
+.kc-drop-cap::first-letter {
+  font-family: var(--font-display);
+  float: left;
+  font-size: 4.4em;
+  line-height: 0.86;
+  padding: 0.08em 0.12em 0 0;
+  margin-right: 0.04em;
+  font-weight: 600;
+  font-style: italic;
+  background: linear-gradient(135deg, #E2761B 0%, #C9A24A 60%, #7A1F2B 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}

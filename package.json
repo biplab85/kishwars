@@ -14,7 +14,9 @@
     "clsx": "^2.1.1",
     "framer-motion": "^11.18.0",
     "gsap": "^3.12.7",
+    "imagesloaded": "^5.0.0",
     "lenis": "^1.1.20",
+    "masonry-layout": "^4.2.2",
     "next": "15.5.15",
     "nodemailer": "^8.0.7",
     "react": "19.0.0",
@@ -23,6 +25,8 @@
     "tailwind-merge": "^2.6.0"
   },
   "devDependencies": {
+    "@types/imagesloaded": "^4.1.7",
+    "@types/masonry-layout": "^4.2.8",
     "@types/node": "^22.10.7",
     "@types/nodemailer": "^8.0.0",
     "@types/react": "^19.0.7",

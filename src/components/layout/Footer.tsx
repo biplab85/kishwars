@@ -3,6 +3,8 @@ import { text } from "@/content/text";
 import { Logo } from "@/components/layout/Logo";
 
 const resources = [
+  { label: "Gallery", href: "/gallery" },
+  { label: "Blog", href: "/blog" },
   { label: "Press", href: "/#press" },
   { label: "Inquiries", href: "mailto:hello@kishwar.com.au" },
   { label: "Newsletter", href: "/#newsletter" },
@@ -123,6 +125,22 @@ const socialIcons: Record<string, (p: IconProps) => React.JSX.Element> = {
 };
 
 const resourceIcons: Record<string, (p: IconProps) => React.JSX.Element> = {
+  Gallery: ({ className }) => (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.6} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      {/* picture frame with sun + mountain */}
+      <rect x="3" y="5" width="18" height="14" rx="2" />
+      <circle cx="9" cy="10" r="1.6" />
+      <path d="m4 17 5-5 4 4 3-3 4 4" />
+    </svg>
+  ),
+  Blog: ({ className }) => (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.6} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      {/* notebook with quill-like lines */}
+      <path d="M5 4h11l3 3v13H5z" />
+      <path d="M16 4v3h3" />
+      <path d="M8 11h8M8 14h8M8 17h5" />
+    </svg>
+  ),
   Press: navIcons.Press,
   Inquiries: ({ className }) => (
     <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.6} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
