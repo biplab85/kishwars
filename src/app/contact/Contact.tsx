@@ -1,7 +1,10 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Reveal } from "@/components/motion/Reveal";
+
+type FormStatus = "idle" | "sending" | "sent" | "error";
 
 const socials = [
   { label: "Instagram", handle: "@kishwar_chowdhury", href: "https://www.instagram.com/kishwar_chowdhury" },
@@ -205,83 +208,7 @@ export function Contact() {
         {/* Form */}
         <div className="md:col-span-7">
           <Reveal variant="rise" delay={0.1}>
-            <form
-              className="relative overflow-hidden rounded-3xl border border-cream/10 bg-gradient-to-br from-pomegranate/15 via-ember to-saffron/10 p-8 backdrop-blur-md md:p-12"
-              onSubmit={(e) => {
-                e.preventDefault();
-                const form = e.currentTarget as HTMLFormElement;
-                const data = new FormData(form);
-                const subject = encodeURIComponent(
-                  `Contact — ${data.get("type") || "General"}`,
-                );
-                const body = encodeURIComponent(
-                  `Name: ${data.get("name") || ""}\nEmail: ${data.get("email") || ""}\nInquiry type: ${data.get("type") || ""}\n\nMessage:\n${data.get("message") || ""}`,
-                );
-                window.location.href = `mailto:hello@kishwar.com.au?subject=${subject}&body=${body}`;
-              }}
-            >
-              <span
-                aria-hidden
-                className="pointer-events-none absolute -right-20 -top-20 h-60 w-60 rounded-full bg-gradient-to-br from-saffron/30 to-pomegranate/25 blur-3xl"
-              />
-
-              <p className="relative flex items-center gap-3 text-[11px] tracking-[0.4em] uppercase text-cream/65">
-                <span aria-hidden className="h-px w-10 bg-cream/40" />
-                Send a message
-              </p>
-
-              <div className="relative mt-8 space-y-4">
-                <input
-                  name="name"
-                  required
-                  placeholder="Your name"
-                  aria-label="Your name"
-                  className="w-full rounded-full border border-cream/15 bg-ember/50 px-5 py-3.5 text-sm text-cream placeholder:text-cream/35 backdrop-blur-md transition-colors focus:border-saffron focus:outline-none"
-                />
-                <input
-                  name="email"
-                  type="email"
-                  required
-                  placeholder="Email"
-                  aria-label="Email"
-                  className="w-full rounded-full border border-cream/15 bg-ember/50 px-5 py-3.5 text-sm text-cream placeholder:text-cream/35 backdrop-blur-md transition-colors focus:border-saffron focus:outline-none"
-                />
-                <select
-                  name="type"
-                  defaultValue=""
-                  aria-label="Inquiry type"
-                  className="w-full appearance-none rounded-full border border-cream/15 bg-ember/50 px-5 py-3.5 text-sm text-cream/85 backdrop-blur-md transition-colors focus:border-saffron focus:outline-none"
-                >
-                  <option value="" disabled>
-                    Inquiry type
-                  </option>
-                  <option className="bg-ember">Speaking</option>
-                  <option className="bg-ember">Brand Partnership</option>
-                  <option className="bg-ember">Media</option>
-                  <option className="bg-ember">Events</option>
-                  <option className="bg-ember">Cookbook</option>
-                  <option className="bg-ember">General</option>
-                </select>
-                <textarea
-                  name="message"
-                  required
-                  rows={5}
-                  placeholder="Tell us a little about it…"
-                  aria-label="Message"
-                  className="w-full resize-none rounded-2xl border border-cream/15 bg-ember/50 px-5 py-4 text-sm text-cream placeholder:text-cream/35 backdrop-blur-md transition-colors focus:border-saffron focus:outline-none"
-                />
-                <button
-                  type="submit"
-                  className="group inline-flex w-full items-center justify-center gap-3 whitespace-nowrap rounded-full bg-gradient-to-r from-saffron via-gold to-pomegranate px-7 py-4 text-sm font-semibold uppercase tracking-[0.22em] text-ember transition-transform duration-300 hover:scale-[1.01]"
-                >
-                  Send Message
-                  <IconArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-                </button>
-                <p className="text-center text-[10px] tracking-[0.32em] uppercase text-cream/40">
-                  Speaking & Brand Partnership inquiries flagged as high-priority
-                </p>
-              </div>
-            </form>
+            <ContactForm />
           </Reveal>
         </div>
       </div>
@@ -429,29 +356,412 @@ function AnimatedMesh() {
 }
 
 /* -------------------------------------------------------------------------- */
+/*                       MELBOURNE MAP — HAND-DRAWN SVG                       */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * Stylised Google-Maps style tile of central Melbourne CBD.
+ * Cream parchment palette, road network (highways + main roads + side streets),
+ * Yarra River, Royal Botanic Gardens, Carlton Gardens, highway shields,
+ * and italic street labels. Centered on Flinders/Swanston (160, 160).
+ */
+function MelbourneMapSvg() {
+  // CBD grid — restrained set of major streets, fewer than before for editorial calm
+  const hRoads = [
+    { y: 78, w: 2.4, label: "La Trobe" },
+    { y: 112, w: 2.4, label: "Lonsdale" },
+    { y: 138, w: 2.4, label: "Bourke" },
+    { y: 160, w: 3.6, label: "Collins" }, // through pin
+    { y: 188, w: 2.4, label: "Flinders" },
+  ];
+  const vRoads = [
+    { x: 78, w: 2.4, label: "William" },
+    { x: 112, w: 2.4, label: "Elizabeth" },
+    { x: 160, w: 3.6, label: "Swanston" }, // through pin
+    { x: 208, w: 2.4, label: "Russell" },
+    { x: 244, w: 2.4, label: "Spring" },
+  ];
+  // Sparse minor streets — just enough texture, not clutter
+  const minorH = [95, 124, 174];
+  const minorV = [95, 136, 226, 270];
+
+  return (
+    <svg
+      viewBox="0 0 320 320"
+      preserveAspectRatio="xMidYMid slice"
+      className="absolute inset-0 h-full w-full"
+      aria-label="Editorial map of central Melbourne"
+    >
+      <defs>
+        {/* Base — radial warm core fading to deep ember at edges */}
+        <radialGradient id="map-paper" cx="50%" cy="50%" r="75%">
+          <stop offset="0%" stopColor="#1A1108" />
+          <stop offset="65%" stopColor="#0E0805" />
+          <stop offset="100%" stopColor="#070403" />
+        </radialGradient>
+        {/* Park — dark olive with subtle vertical falloff */}
+        <linearGradient id="map-park" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#2C3A1E" />
+          <stop offset="100%" stopColor="#1B2611" />
+        </linearGradient>
+        {/* Water — desaturated dark slate */}
+        <linearGradient id="map-water" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#1F3340" />
+          <stop offset="100%" stopColor="#13212B" />
+        </linearGradient>
+        {/* Block fill — barely-perceptible warm fill, gives texture between roads */}
+        <linearGradient id="map-block" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stopColor="#1A1108" />
+          <stop offset="100%" stopColor="#140C06" />
+        </linearGradient>
+        {/* Highway gold gradient — true premium feel */}
+        <linearGradient id="map-highway" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stopColor="#8E6A28" />
+          <stop offset="50%" stopColor="#C9A24A" />
+          <stop offset="100%" stopColor="#8E6A28" />
+        </linearGradient>
+
+        {/* Soft glow for highway + pin — gives the cartographic luminosity */}
+        <filter id="map-glow" x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur stdDeviation="0.9" result="blur" />
+          <feMerge>
+            <feMergeNode in="blur" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+
+        {/* Subtle film grain — premium printed-map texture */}
+        <filter id="map-grain" x="0" y="0" width="100%" height="100%">
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.95"
+            numOctaves="2"
+            seed="7"
+          />
+          <feColorMatrix
+            values="0 0 0 0 0.85
+                    0 0 0 0 0.78
+                    0 0 0 0 0.6
+                    0 0 0 0.06 0"
+          />
+        </filter>
+
+        {/* River clip — used for inner highlight */}
+        <clipPath id="river-clip">
+          <path d="M -10 222 Q 60 200, 130 218 Q 180 232, 230 218 Q 280 202, 340 198 L 340 248 Q 280 252, 230 248 Q 180 244, 130 248 Q 60 252, -10 248 Z" />
+        </clipPath>
+      </defs>
+
+      {/* Base */}
+      <rect width="320" height="320" fill="url(#map-paper)" />
+
+      {/* Latitude / longitude graticule — extremely faint, premium cartographic touch */}
+      <g stroke="#C9A24A" strokeWidth="0.25" opacity="0.06">
+        {[40, 80, 120, 160, 200, 240, 280].map((p) => (
+          <line key={`gh-${p}`} x1="0" y1={p} x2="320" y2={p} />
+        ))}
+        {[40, 80, 120, 160, 200, 240, 280].map((p) => (
+          <line key={`gv-${p}`} x1={p} y1="0" x2={p} y2="320" />
+        ))}
+      </g>
+
+      {/* Block fills — quiet warm rectangles between major roads */}
+      {[
+        [78, 80, 34, 30], [114, 80, 44, 30], [162, 80, 44, 30], [210, 80, 32, 30],
+        [78, 114, 34, 22], [114, 114, 44, 22], [162, 114, 44, 22], [210, 114, 32, 22],
+        [78, 140, 34, 18], [114, 140, 44, 18], [162, 140, 44, 18], [210, 140, 32, 18],
+        [78, 162, 34, 24], [114, 162, 44, 24], [162, 162, 44, 24], [210, 162, 32, 24],
+      ].map(([x, y, w, h], i) => (
+        <rect
+          key={`blk-${i}`}
+          x={x}
+          y={y}
+          width={w}
+          height={h}
+          fill="url(#map-block)"
+          stroke="rgba(201,162,74,0.04)"
+          strokeWidth="0.3"
+        />
+      ))}
+
+      {/* Carlton Gardens (top-right) */}
+      <path
+        d="M 248 35 Q 290 32, 305 55 Q 312 85, 295 100 Q 270 110, 250 95 Q 240 75, 248 35 Z"
+        fill="url(#map-park)"
+      />
+      {/* Royal Botanic Gardens (lower-right) */}
+      <path
+        d="M 195 240 Q 225 226, 260 234 Q 295 242, 304 270 Q 300 304, 268 312 Q 230 318, 200 304 Q 178 288, 178 268 Q 178 252, 195 240 Z"
+        fill="url(#map-park)"
+      />
+
+      {/* Yarra River — wider, calm slate, with subtle shoreline highlight */}
+      <path
+        id="map-river"
+        d="M -10 222 Q 60 200, 130 218 Q 180 232, 230 218 Q 280 202, 340 198"
+        fill="none"
+        stroke="url(#map-water)"
+        strokeWidth="20"
+        strokeLinecap="round"
+      />
+      {/* River shoreline — top edge, very subtle gold */}
+      <path
+        d="M -10 222 Q 60 200, 130 218 Q 180 232, 230 218 Q 280 202, 340 198"
+        fill="none"
+        stroke="rgba(201,162,74,0.18)"
+        strokeWidth="0.4"
+        opacity="0.9"
+        transform="translate(0 -10)"
+      />
+
+      {/* Highway — Eastern Freeway as a refined gilded ribbon (no dashes) */}
+      <g filter="url(#map-glow)">
+        <line
+          x1="0"
+          y1="42"
+          x2="320"
+          y2="42"
+          stroke="url(#map-highway)"
+          strokeWidth="2.4"
+          strokeLinecap="round"
+          opacity="0.95"
+        />
+        <line
+          x1="0"
+          y1="42"
+          x2="320"
+          y2="42"
+          stroke="rgba(255,210,125,0.25)"
+          strokeWidth="0.5"
+        />
+      </g>
+
+      {/* Major roads — refined casing + thin cream centerline */}
+      {hRoads.map((r) => (
+        <g key={`h-${r.y}`}>
+          <line
+            x1="0"
+            y1={r.y}
+            x2="320"
+            y2={r.y}
+            stroke="#0A0604"
+            strokeWidth="1.6"
+            opacity="0.7"
+          />
+          <line
+            x1="0"
+            y1={r.y}
+            x2="320"
+            y2={r.y}
+            stroke="#3A2E1E"
+            strokeWidth="1.2"
+            opacity="0.92"
+          />
+        </g>
+      ))}
+      {vRoads.map((r) => (
+        <g key={`v-${r.x}`}>
+          <line
+            x1={r.x}
+            y1="0"
+            x2={r.x}
+            y2="320"
+            stroke="#0A0604"
+            strokeWidth="1.6"
+            opacity="0.7"
+          />
+          <line
+            x1={r.x}
+            y1="0"
+            x2={r.x}
+            y2="320"
+            stroke="#3A2E1E"
+            strokeWidth="1.2"
+            opacity="0.92"
+          />
+        </g>
+      ))}
+
+      {/* Minor streets — sparse, very subtle */}
+      {minorH.map((y, i) => (
+        <line
+          key={`mh-${i}`}
+          x1="20"
+          y1={y}
+          x2="300"
+          y2={y}
+          stroke="#2A2014"
+          strokeWidth="0.7"
+          opacity="0.55"
+        />
+      ))}
+      {minorV.map((x, i) => (
+        <line
+          key={`mv-${i}`}
+          x1={x}
+          y1="20"
+          x2={x}
+          y2="300"
+          stroke="#2A2014"
+          strokeWidth="0.7"
+          opacity="0.55"
+        />
+      ))}
+
+      {/* River label — along the curve, in dim cream italic */}
+      <text
+        fontFamily="Georgia, 'Times New Roman', serif"
+        fontStyle="italic"
+        fontSize="6"
+        fill="#9FB7C4"
+        opacity="0.85"
+        letterSpacing="0.6"
+      >
+        <textPath href="#map-river" startOffset="22%">
+          Y a r r a   R i v e r
+        </textPath>
+      </text>
+
+      {/* Landmark labels — small caps, refined letterspacing */}
+      <g
+        fontFamily="Georgia, 'Times New Roman', serif"
+        fill="#9FB28A"
+        textAnchor="middle"
+        opacity="0.85"
+      >
+        <text x="240" y="272" fontSize="4.6" letterSpacing="1.1">
+          ROYAL BOTANIC
+        </text>
+        <text x="240" y="280" fontSize="4.6" letterSpacing="1.1">
+          GARDENS
+        </text>
+        <text x="278" y="65" fontSize="4.0" letterSpacing="1.0">
+          CARLTON
+        </text>
+        <text x="278" y="73" fontSize="4.0" letterSpacing="1.0">
+          GARDENS
+        </text>
+      </g>
+
+      {/* Street labels — only the major streets, italic serif, very restrained */}
+      <g
+        fontFamily="Georgia, 'Times New Roman', serif"
+        fontStyle="italic"
+        fill="#A89270"
+        opacity="0.75"
+      >
+        {/* Horizontal */}
+        <text x="22" y="76" fontSize="4.6" letterSpacing="0.3">La Trobe St</text>
+        <text x="22" y="110" fontSize="4.6" letterSpacing="0.3">Lonsdale St</text>
+        <text x="22" y="136" fontSize="4.6" letterSpacing="0.3">Bourke St</text>
+        <text x="22" y="158" fontSize="5.0" letterSpacing="0.3" fill="#C9B58A" opacity="0.95">Collins St</text>
+        <text x="22" y="186" fontSize="4.6" letterSpacing="0.3">Flinders St</text>
+
+        {/* Vertical — rotated labels riding their streets */}
+        <text fontSize="4.6" letterSpacing="0.3" transform="translate(76 304) rotate(-90)">
+          William St
+        </text>
+        <text fontSize="4.6" letterSpacing="0.3" transform="translate(110 304) rotate(-90)">
+          Elizabeth St
+        </text>
+        <text
+          fontSize="5.0"
+          letterSpacing="0.3"
+          fill="#C9B58A"
+          opacity="0.95"
+          transform="translate(158 304) rotate(-90)"
+        >
+          Swanston St
+        </text>
+        <text fontSize="4.6" letterSpacing="0.3" transform="translate(206 304) rotate(-90)">
+          Russell St
+        </text>
+        <text fontSize="4.6" letterSpacing="0.3" transform="translate(242 304) rotate(-90)">
+          Spring St
+        </text>
+      </g>
+
+      {/* Editorial wordmark — top corner */}
+      <g
+        fontFamily="Georgia, 'Times New Roman', serif"
+        fill="#C9A24A"
+        opacity="0.75"
+      >
+        <text
+          x="20"
+          y="22"
+          fontSize="5.2"
+          letterSpacing="2.4"
+          fontStyle="italic"
+        >
+          MELBOURNE
+        </text>
+        <line
+          x1="20"
+          y1="26"
+          x2="92"
+          y2="26"
+          stroke="#C9A24A"
+          strokeWidth="0.3"
+          opacity="0.5"
+        />
+        <text
+          x="20"
+          y="32"
+          fontSize="3.4"
+          letterSpacing="1.6"
+          fill="#A89270"
+          opacity="0.75"
+        >
+          VICTORIA · AU
+        </text>
+      </g>
+
+      {/* Coordinates — bottom-left, in degrees-minutes-seconds, premium cartographic format */}
+      <g
+        fontFamily="Georgia, 'Times New Roman', serif"
+        fill="#A89270"
+        opacity="0.65"
+      >
+        <text x="20" y="304" fontSize="3.4" letterSpacing="1.4">
+          37° 48′ 49″ S
+        </text>
+        <text x="20" y="312" fontSize="3.4" letterSpacing="1.4">
+          144° 57′ 47″ E
+        </text>
+      </g>
+
+      {/* Edge vignette — frames the map and pulls focus to the pin */}
+      <radialGradient id="map-vignette" cx="50%" cy="50%" r="60%">
+        <stop offset="0%" stopColor="rgba(0,0,0,0)" />
+        <stop offset="75%" stopColor="rgba(0,0,0,0)" />
+        <stop offset="100%" stopColor="rgba(0,0,0,0.65)" />
+      </radialGradient>
+      <rect width="320" height="320" fill="url(#map-vignette)" />
+
+      {/* Film grain — sits on top, multiplied by very low opacity */}
+      <rect
+        width="320"
+        height="320"
+        filter="url(#map-grain)"
+        opacity="0.55"
+      />
+    </svg>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
 /*                          LOCATION CHART (HERO)                             */
 /* -------------------------------------------------------------------------- */
 
 /**
- * A premium "navigational chart" frame: gilded plaque housing a square
- * radar/map face with a stylized Australia silhouette, Melbourne pinned,
- * pulsing radar rings, a sweeping scan line, ambient inbound dots, and
- * compass markers. Caption strip with coordinates.
+ * Hand-drawn parchment-style map of central Melbourne, framed in editorial
+ * gold treatment with an animated saffron pin overlay, coordinate ribbon,
+ * and a "View on Google Maps" link.
  */
 function LocationChart() {
-  // ambient dots ("messages from elsewhere") — deterministic positions
-  const dots = [
-    { left: "12%", top: "18%", d: 3.2, dl: 0.0 },
-    { left: "78%", top: "14%", d: 4.1, dl: 0.7 },
-    { left: "22%", top: "76%", d: 3.6, dl: 1.4 },
-    { left: "82%", top: "62%", d: 4.4, dl: 0.3 },
-    { left: "60%", top: "22%", d: 3.0, dl: 1.1 },
-    { left: "30%", top: "44%", d: 3.8, dl: 0.5 },
-    { left: "70%", top: "82%", d: 4.0, dl: 0.9 },
-    { left: "16%", top: "58%", d: 3.4, dl: 1.7 },
-    { left: "50%", top: "8%", d: 3.6, dl: 2.0 },
-    { left: "88%", top: "40%", d: 4.2, dl: 0.2 },
-  ];
+  const mapsHref =
+    "https://www.google.com/maps/place/Melbourne+VIC,+Australia/@-37.8136,144.9631,12z";
 
   return (
     <motion.div
@@ -467,357 +777,359 @@ function LocationChart() {
         transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
       />
 
-      {/* Premium borderless chart face */}
-      <div
-        className="relative aspect-square overflow-hidden"
-        style={{
-          background:
-            "radial-gradient(ellipse at 56.5% 64%, rgba(45,24,16,0.85) 0%, rgba(20,11,7,0.95) 45%, rgba(6,3,2,1) 90%)",
-        }}
-      >
-            {/* Cartographic grid — major + minor */}
-            <svg
-              viewBox="0 0 200 200"
-              className="absolute inset-0 h-full w-full"
-              aria-hidden
-            >
-              <defs>
-                <pattern id="contact-grid-fine" width="10" height="10" patternUnits="userSpaceOnUse">
-                  <path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(244,232,216,0.04)" strokeWidth="0.4" />
-                </pattern>
-                <pattern id="contact-grid-coarse" width="40" height="40" patternUnits="userSpaceOnUse">
-                  <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(244,232,216,0.08)" strokeWidth="0.5" />
-                </pattern>
-                <radialGradient id="contact-aus-fill" cx="50%" cy="50%" r="50%">
-                  <stop offset="0%" stopColor="rgba(226,118,27,0.18)" />
-                  <stop offset="100%" stopColor="rgba(226,118,27,0.04)" />
-                </radialGradient>
-                <radialGradient id="contact-vignette" cx="56.5%" cy="64%" r="80%">
-                  <stop offset="0%" stopColor="rgba(0,0,0,0)" />
-                  <stop offset="70%" stopColor="rgba(0,0,0,0)" />
-                  <stop offset="100%" stopColor="rgba(0,0,0,0.55)" />
-                </radialGradient>
-              </defs>
+      {/* Gradient ring wrapper — refined gilded edge that follows the rounded corners */}
+      <div className="relative rounded-[28px] bg-gradient-to-br from-saffron/55 via-gold/70 to-pomegranate/55 p-[1px] shadow-[0_40px_100px_-40px_rgba(0,0,0,0.7),0_0_0_1px_rgba(201,162,74,0.08)]">
+      {/* Inner cream hairline — sits just inside the gold ring for that triple-rule feel */}
+      <div className="relative aspect-square overflow-hidden rounded-[27px] bg-ember ring-1 ring-inset ring-cream/[0.08]">
+        {/* Hand-drawn parchment map of central Melbourne — Google-Maps style */}
+        <MelbourneMapSvg />
 
-              <rect width="200" height="200" fill="url(#contact-grid-fine)" />
-              <rect width="200" height="200" fill="url(#contact-grid-coarse)" />
+        {/* Pin overlay — centered on Collins/Swanston (50%, 50%) */}
+        <div
+          className="pointer-events-none absolute"
+          style={{ left: "50%", top: "50%", transform: "translate(-50%, -50%)" }}
+        >
+          {/* Soft outer glow — gives the pin its luminous halo */}
+          <motion.span
+            aria-hidden
+            className="absolute -inset-7 rounded-full"
+            style={{
+              background:
+                "radial-gradient(circle, rgba(226,118,27,0.45) 0%, rgba(226,118,27,0) 70%)",
+              filter: "blur(8px)",
+            }}
+            animate={{ scale: [1, 1.18, 1], opacity: [0.55, 0.9, 0.55] }}
+            transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut" }}
+          />
 
-              {/* Major crosshairs at Melbourne (113, 128) — the chart is centered on the pin */}
-              <line x1="113" y1="0" x2="113" y2="200" stroke="rgba(244,232,216,0.10)" strokeWidth="0.5" strokeDasharray="2 4" />
-              <line x1="0" y1="128" x2="200" y2="128" stroke="rgba(244,232,216,0.10)" strokeWidth="0.5" strokeDasharray="2 4" />
+          {/* Single sweeping target ring — slower, more considered than three */}
+          <motion.span
+            aria-hidden
+            className="absolute left-1/2 top-1/2 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full border border-saffron/70"
+            animate={{ scale: [1, 5, 5], opacity: [0.65, 0, 0] }}
+            transition={{ duration: 4.5, repeat: Infinity, ease: "easeOut" }}
+          />
 
-              {/* Stylized Australia silhouette — refined path */}
-              <path
-                d="M 48 96
-                   C 50 82, 60 76, 72 75
-                   C 84 72, 96 71, 110 76
-                   C 124 73, 140 76, 152 84
-                   C 162 90, 164 102, 158 110
-                   C 161 122, 152 128, 140 128
-                   C 128 132, 116 130, 108 128
-                   C 100 134, 88 132, 78 128
-                   C 66 128, 56 124, 50 116
-                   C 44 108, 46 100, 48 96 Z"
-                fill="url(#contact-aus-fill)"
-                stroke="rgba(201,162,74,0.55)"
-                strokeWidth="0.9"
-                strokeLinejoin="round"
-              />
-              {/* Tasmania */}
-              <ellipse
-                cx="115"
-                cy="146"
-                rx="6"
-                ry="4"
-                fill="url(#contact-aus-fill)"
-                stroke="rgba(201,162,74,0.55)"
-                strokeWidth="0.6"
-              />
+          {/* Refined dot — pure gold core with a fine pomegranate ring + cream hairline */}
+          <motion.span
+            className="relative block h-[9px] w-[9px] rounded-full bg-gradient-to-br from-saffron via-gold to-pomegranate shadow-[0_0_14px_rgba(226,118,27,0.85),0_0_0_1px_rgba(20,11,7,0.6)] ring-[1.5px] ring-cream"
+            animate={{ scale: [1, 1.08, 1] }}
+            transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
+          />
 
-              {/* Periphery tick marks — 24 around the perimeter (every 15°), every 6th highlighted */}
-              {Array.from({ length: 24 }).map((_, i) => {
-                const angle = (i * 15 * Math.PI) / 180;
-                const cx = 113;
-                const cy = 128;
-                const r1 = 88;
-                const r2 = i % 6 === 0 ? 80 : 84;
-                const x1 = cx + r1 * Math.cos(angle);
-                const y1 = cy + r1 * Math.sin(angle);
-                const x2 = cx + r2 * Math.cos(angle);
-                const y2 = cy + r2 * Math.sin(angle);
-                return (
-                  <line
-                    key={i}
-                    x1={x1}
-                    y1={y1}
-                    x2={x2}
-                    y2={y2}
-                    stroke={i % 6 === 0 ? "rgba(226,118,27,0.6)" : "rgba(244,232,216,0.25)"}
-                    strokeWidth={i % 6 === 0 ? 1.2 : 0.6}
-                    strokeLinecap="round"
-                  />
-                );
-              })}
-
-              {/* Outer faint reference ring */}
-              <circle cx="113" cy="128" r="88" fill="none" stroke="rgba(244,232,216,0.10)" strokeWidth="0.5" />
-
-              {/* Vignette overlay */}
-              <rect width="200" height="200" fill="url(#contact-vignette)" />
-            </svg>
-
-            {/* Concentric pulsing radar rings — 4 rings, smooth fade */}
-            {[0, 1, 2, 3].map((i) => (
-              <motion.span
-                key={i}
-                aria-hidden
-                className="absolute h-[88%] w-[88%] rounded-full"
-                style={{
-                  left: "56.5%",
-                  top: "64%",
-                  translate: "-50% -50%",
-                  border: "1px solid rgba(226,118,27,0.55)",
-                  boxShadow: "0 0 0 0.5px rgba(226,118,27,0.15)",
-                }}
-                animate={{ scale: [0.10, 1.0], opacity: [0.85, 0] }}
-                transition={{
-                  duration: 5.2,
-                  repeat: Infinity,
-                  delay: i * 1.3,
-                  ease: [0.22, 0.6, 0.36, 1],
-                }}
-              />
-            ))}
-
-            {/* Radar sweep wedge — soft trail behind the scan line */}
-            <motion.div
-              aria-hidden
-              className="pointer-events-none absolute"
-              style={{
-                left: "56.5%",
-                top: "64%",
-                width: "88%",
-                height: "88%",
-                translate: "0 -50%",
-                transformOrigin: "0% 50%",
-                background:
-                  "conic-gradient(from -3deg at 0% 50%, rgba(226,118,27,0.30) 0deg, rgba(226,118,27,0.10) 12deg, rgba(226,118,27,0) 28deg, transparent 360deg)",
-                clipPath: "polygon(0 0, 100% 0, 100% 50%, 0 50%)",
-                willChange: "transform",
-              }}
-              animate={{ rotate: [0, 360] }}
-              transition={{ duration: 8, repeat: Infinity, ease: "linear", repeatType: "loop" }}
-            />
-
-            {/* Sweeping scan line — continuous clock-style rotation */}
-            <motion.div
-              aria-hidden
-              className="pointer-events-none absolute"
-              style={{
-                left: "56.5%",
-                top: "64%",
-                width: "44%",
-                height: "1.5px",
-                transformOrigin: "0% 50%",
-                background:
-                  "linear-gradient(90deg, rgba(226,118,27,0.95) 0%, rgba(201,162,74,0.5) 30%, rgba(226,118,27,0) 100%)",
-                filter: "drop-shadow(0 0 6px rgba(226,118,27,0.7))",
-                willChange: "transform",
-              }}
-              animate={{ rotate: [0, 360] }}
-              transition={{
-                duration: 8,
-                repeat: Infinity,
-                ease: "linear",
-                repeatType: "loop",
-              }}
-            />
-
-            {/* Ambient inbound dots */}
-            {dots.map((d, i) => (
-              <motion.span
-                key={i}
-                aria-hidden
-                className="absolute h-1 w-1 rounded-full bg-cream/55"
-                style={{ left: d.left, top: d.top }}
-                animate={{ opacity: [0.15, 0.7, 0.15], scale: [0.9, 1.4, 0.9] }}
-                transition={{ duration: d.d, repeat: Infinity, delay: d.dl, ease: "easeInOut" }}
-              />
-            ))}
-
-            {/* Center pin — Melbourne · refined three-layer composition */}
+          {/* Editorial info card — premium plaque */}
+          <div className="absolute left-[18px] top-1/2 -translate-y-1/2">
             <div
-              className="absolute"
-              style={{ left: "56.5%", top: "64%", transform: "translate(-50%, -50%)" }}
+              className="whitespace-nowrap rounded-[3px] border border-cream/15 bg-ember/95 px-2.5 py-[5px] backdrop-blur-md"
+              style={{
+                boxShadow:
+                  "0 6px 20px rgba(0,0,0,0.55), 0 0 0 1px rgba(201,162,74,0.18) inset",
+              }}
             >
-              {/* Outer aura — soft radial glow */}
-              <motion.span
-                aria-hidden
-                className="absolute -inset-5 rounded-full"
-                style={{
-                  background:
-                    "radial-gradient(circle, rgba(226,118,27,0.55) 0%, rgba(226,118,27,0) 70%)",
-                  filter: "blur(6px)",
-                }}
-                animate={{ scale: [1, 1.3, 1], opacity: [0.5, 0.95, 0.5] }}
-                transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
-              />
-
-              {/* Outer ring (target marker) */}
-              <span
-                aria-hidden
-                className="absolute -inset-2.5 rounded-full border border-saffron/35"
-              />
-
-              {/* Middle ring (gold accent) */}
-              <span
-                aria-hidden
-                className="absolute -inset-1.5 rounded-full border border-gold/55"
-              />
-
-              {/* Center core */}
-              <motion.span
-                className="relative block h-2.5 w-2.5 rounded-full bg-gradient-to-br from-saffron via-gold to-pomegranate shadow-[0_0_18px_rgba(226,118,27,0.95)]"
-                animate={{ scale: [1, 1.12, 1] }}
-                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-              />
-
-              {/* Connector line + label */}
-              <div className="absolute left-3.5 top-1/2 flex -translate-y-1/2 items-center gap-2">
-                <span aria-hidden className="block h-px w-6 bg-gradient-to-r from-saffron/70 to-cream/30" />
+              <div className="flex items-center gap-2">
                 <span
-                  className="whitespace-nowrap font-display italic text-cream/90"
+                  aria-hidden
+                  className="block h-1 w-1 rounded-full bg-saffron"
+                  style={{ boxShadow: "0 0 6px rgba(226,118,27,0.9)" }}
+                />
+                <span
+                  className="font-display text-cream"
                   style={{
-                    fontSize: "11px",
-                    letterSpacing: "0.01em",
-                    textShadow: "0 0 10px rgba(0,0,0,0.6)",
+                    fontSize: "10px",
+                    letterSpacing: "0.18em",
+                    textTransform: "uppercase",
                   }}
                 >
                   Melbourne
                 </span>
               </div>
+              <div
+                className="mt-0.5 font-display italic text-cream/50"
+                style={{ fontSize: "8.5px", letterSpacing: "0.05em" }}
+              >
+                Collins × Swanston
+              </div>
             </div>
+          </div>
+        </div>
 
-            {/* Premium SVG border — triple-rule + art-deco corners + cardinal diamonds */}
-            <svg
-              viewBox="0 0 200 200"
-              className="pointer-events-none absolute inset-0 h-full w-full"
+        {/* Caption ribbon — refined editorial footer */}
+        <div className="absolute inset-x-0 bottom-0 z-20 flex items-center justify-between gap-4 bg-gradient-to-t from-ember via-ember/85 to-transparent px-5 pb-3.5 pt-10">
+          <div className="flex items-center gap-2 text-[9.5px] tracking-[0.4em] uppercase text-cream/45">
+            <span aria-hidden className="block h-px w-5 bg-cream/25" />
+            <span className="font-display italic tracking-[0.18em] normal-case text-cream/65">
+              The studio
+            </span>
+          </div>
+          <a
+            href={mapsHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group inline-flex items-center gap-1.5 text-[9.5px] tracking-[0.32em] uppercase text-saffron/85 transition-colors hover:text-saffron"
+          >
+            Open in Maps
+            <span
               aria-hidden
+              className="transition-transform duration-300 group-hover:translate-x-0.5"
             >
-              <defs>
-                <linearGradient id="contact-border-grad" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stopColor="#E2761B" />
-                  <stop offset="35%" stopColor="#C9A24A" />
-                  <stop offset="65%" stopColor="#C9A24A" />
-                  <stop offset="100%" stopColor="#7A1F2B" />
-                </linearGradient>
-              </defs>
+              ↗
+            </span>
+          </a>
+        </div>
 
-              {/* Outermost hairline */}
-              <rect
-                x="1.5"
-                y="1.5"
-                width="197"
-                height="197"
-                fill="none"
-                stroke="url(#contact-border-grad)"
-                strokeWidth="0.45"
-                strokeOpacity="0.55"
-              />
-              {/* Main rule */}
-              <rect
-                x="5"
-                y="5"
-                width="190"
-                height="190"
-                fill="none"
-                stroke="url(#contact-border-grad)"
-                strokeWidth="0.95"
-                strokeOpacity="0.9"
-              />
-              {/* Inner cream hairline */}
-              <rect
-                x="9"
-                y="9"
-                width="182"
-                height="182"
-                fill="none"
-                stroke="rgba(244,232,216,0.22)"
-                strokeWidth="0.4"
-              />
-
-              {/* Four corner ornaments */}
-              {[
-                { tx: 5, ty: 5, rotate: 0 },
-                { tx: 195, ty: 5, rotate: 90 },
-                { tx: 195, ty: 195, rotate: 180 },
-                { tx: 5, ty: 195, rotate: 270 },
-              ].map(({ tx, ty, rotate }, i) => (
-                <g key={`c-${i}`} transform={`translate(${tx} ${ty}) rotate(${rotate})`}>
-                  {/* Inner L-bracket */}
-                  <path
-                    d="M 14 4 L 4 4 L 4 14"
-                    fill="none"
-                    stroke="url(#contact-border-grad)"
-                    strokeWidth="0.7"
-                    strokeOpacity="0.7"
-                    strokeLinecap="round"
-                  />
-                  {/* Diamond accent at the rule intersection */}
-                  <path
-                    d="M 0 0 L 2.5 2.5 L 0 5 L -2.5 2.5 Z"
-                    fill="url(#contact-border-grad)"
-                    opacity="0.95"
-                  />
-                  {/* Tiny inner pip */}
-                  <circle cx="9" cy="9" r="0.7" fill="url(#contact-border-grad)" opacity="0.7" />
-                </g>
-              ))}
-
-              {/* Cardinal-edge diamond markers (top, right, bottom, left mid-points) */}
-              {[
-                { tx: 100, ty: 5, rotate: 0 },
-                { tx: 195, ty: 100, rotate: 90 },
-                { tx: 100, ty: 195, rotate: 180 },
-                { tx: 5, ty: 100, rotate: 270 },
-              ].map(({ tx, ty, rotate }, i) => (
-                <g key={`m-${i}`} transform={`translate(${tx} ${ty}) rotate(${rotate})`}>
-                  {/* Lateral hairlines flanking the diamond */}
-                  <line
-                    x1="-14"
-                    y1="2.5"
-                    x2="-4"
-                    y2="2.5"
-                    stroke="url(#contact-border-grad)"
-                    strokeWidth="0.4"
-                    strokeOpacity="0.5"
-                  />
-                  <line
-                    x1="4"
-                    y1="2.5"
-                    x2="14"
-                    y2="2.5"
-                    stroke="url(#contact-border-grad)"
-                    strokeWidth="0.4"
-                    strokeOpacity="0.5"
-                  />
-                  {/* Diamond marker centered between the two rules */}
-                  <path
-                    d="M 0 0 L 2 2.5 L 0 5 L -2 2.5 Z"
-                    fill="url(#contact-border-grad)"
-                    opacity="0.95"
-                  />
-                </g>
-              ))}
-            </svg>
+      </div>
       </div>
     </motion.div>
   );
 }
 
 /* -------------------------------------------------------------------------- */
+/*                                CONTACT FORM                                */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * Inquiry form. Posts to /api/contact (Mailtrap via nodemailer on the server).
+ * - Tracks status (idle / sending / sent / error) with inline feedback.
+ * - Honeypot field "website" — visually hidden, traps bots.
+ * - On success, the form is replaced with a confirmation card.
+ */
+function ContactForm() {
+  const [status, setStatus] = useState<FormStatus>("idle");
+  const [errorMsg, setErrorMsg] = useState<string>("");
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    if (status === "sending") return;
+
+    const form = e.currentTarget;
+    const data = new FormData(form);
+    const payload = {
+      name: String(data.get("name") ?? ""),
+      email: String(data.get("email") ?? ""),
+      type: String(data.get("type") ?? "General"),
+      message: String(data.get("message") ?? ""),
+      website: String(data.get("website") ?? ""), // honeypot
+    };
+
+    setStatus("sending");
+    setErrorMsg("");
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const json = (await res.json().catch(() => ({}))) as {
+        ok?: boolean;
+        error?: string;
+      };
+
+      if (res.ok && json.ok) {
+        setStatus("sent");
+        form.reset();
+      } else {
+        setStatus("error");
+        setErrorMsg(
+          json.error ?? "Something went wrong. Please try again shortly.",
+        );
+      }
+    } catch {
+      setStatus("error");
+      setErrorMsg("Network issue — please try again in a moment.");
+    }
+  }
+
+  if (status === "sent") {
+    return (
+      <div className="relative overflow-hidden rounded-3xl border border-cream/10 bg-gradient-to-br from-pomegranate/15 via-ember to-saffron/10 p-10 backdrop-blur-md md:p-14">
+        <span
+          aria-hidden
+          className="pointer-events-none absolute -right-20 -top-20 h-60 w-60 rounded-full bg-gradient-to-br from-saffron/30 to-pomegranate/25 blur-3xl"
+        />
+        <div className="relative">
+          <p className="flex items-center gap-3 text-[11px] tracking-[0.4em] uppercase text-saffron">
+            <span aria-hidden className="h-px w-10 bg-saffron/60" />
+            Received
+          </p>
+          <h3
+            className="mt-6 font-display text-cream"
+            style={{
+              fontSize: "clamp(1.6rem, 2.6vw, 2.2rem)",
+              lineHeight: 1.15,
+              letterSpacing: "-0.015em",
+            }}
+          >
+            Thank you — your message is{" "}
+            <span className="italic bg-gradient-to-br from-saffron to-gold bg-clip-text text-transparent">
+              in the inbox
+            </span>
+            .
+          </h3>
+          <p className="mt-5 max-w-[52ch] leading-relaxed text-cream/70">
+            Every email is read. We come back within two business days.
+            Speaking & Brand Partnership inquiries are flagged as high-priority.
+          </p>
+          <button
+            type="button"
+            onClick={() => setStatus("idle")}
+            className="mt-8 inline-flex items-center gap-2 text-[11px] tracking-[0.32em] uppercase text-saffron transition-colors hover:text-cream"
+          >
+            <span>Send another</span>
+            <span aria-hidden>↗</span>
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  const isSending = status === "sending";
+
+  return (
+    <form
+      noValidate
+      onSubmit={handleSubmit}
+      className="relative overflow-hidden rounded-3xl border border-cream/10 bg-gradient-to-br from-pomegranate/15 via-ember to-saffron/10 p-8 backdrop-blur-md md:p-12"
+    >
+      <span
+        aria-hidden
+        className="pointer-events-none absolute -right-20 -top-20 h-60 w-60 rounded-full bg-gradient-to-br from-saffron/30 to-pomegranate/25 blur-3xl"
+      />
+
+      <p className="relative flex items-center gap-3 text-[11px] tracking-[0.4em] uppercase text-cream/65">
+        <span aria-hidden className="h-px w-10 bg-cream/40" />
+        Send a message
+      </p>
+
+      {/* Honeypot — visually hidden, off-screen, untabbable. Bots that fill every field will trip this. */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute left-[-9999px] top-auto h-px w-px overflow-hidden opacity-0"
+      >
+        <label>
+          Website
+          <input
+            type="text"
+            name="website"
+            tabIndex={-1}
+            autoComplete="off"
+            defaultValue=""
+          />
+        </label>
+      </div>
+
+      <fieldset disabled={isSending} className="relative mt-8 space-y-4">
+        <input
+          name="name"
+          required
+          placeholder="Your name"
+          aria-label="Your name"
+          maxLength={120}
+          className="w-full rounded-full border border-cream/15 bg-ember/50 px-5 py-3.5 text-sm text-cream placeholder:text-cream/35 backdrop-blur-md transition-colors focus:border-saffron focus:outline-none disabled:opacity-60"
+        />
+        <input
+          name="email"
+          type="email"
+          required
+          placeholder="Email"
+          aria-label="Email"
+          maxLength={200}
+          className="w-full rounded-full border border-cream/15 bg-ember/50 px-5 py-3.5 text-sm text-cream placeholder:text-cream/35 backdrop-blur-md transition-colors focus:border-saffron focus:outline-none disabled:opacity-60"
+        />
+        <select
+          name="type"
+          defaultValue=""
+          aria-label="Inquiry type"
+          required
+          className="w-full appearance-none rounded-full border border-cream/15 bg-ember/50 px-5 py-3.5 text-sm text-cream/85 backdrop-blur-md transition-colors focus:border-saffron focus:outline-none disabled:opacity-60"
+        >
+          <option value="" disabled>
+            Inquiry type
+          </option>
+          <option className="bg-ember">Speaking</option>
+          <option className="bg-ember">Brand Partnership</option>
+          <option className="bg-ember">Media</option>
+          <option className="bg-ember">Events</option>
+          <option className="bg-ember">Cookbook</option>
+          <option className="bg-ember">General</option>
+        </select>
+        <textarea
+          name="message"
+          required
+          rows={5}
+          maxLength={5000}
+          placeholder="Tell us a little about it…"
+          aria-label="Message"
+          className="w-full resize-none rounded-2xl border border-cream/15 bg-ember/50 px-5 py-4 text-sm text-cream placeholder:text-cream/35 backdrop-blur-md transition-colors focus:border-saffron focus:outline-none disabled:opacity-60"
+        />
+        <button
+          type="submit"
+          className="group inline-flex w-full items-center justify-center gap-3 whitespace-nowrap rounded-full bg-gradient-to-r from-saffron via-gold to-pomegranate px-7 py-4 text-sm font-semibold uppercase tracking-[0.22em] text-ember transition-transform duration-300 hover:scale-[1.01] disabled:cursor-not-allowed disabled:opacity-70 disabled:hover:scale-100"
+        >
+          {isSending ? (
+            <>
+              <SpinnerDot className="h-3.5 w-3.5" />
+              Sending…
+            </>
+          ) : (
+            <>
+              Send Message
+              <IconArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+            </>
+          )}
+        </button>
+
+        {status === "error" && errorMsg ? (
+          <p
+            role="alert"
+            aria-live="polite"
+            className="text-center text-[11px] tracking-[0.18em] text-pomegranate"
+          >
+            {errorMsg}
+          </p>
+        ) : (
+          <p className="text-center text-[10px] tracking-[0.32em] uppercase text-cream/40">
+            Speaking &amp; Brand Partnership inquiries flagged as high-priority
+          </p>
+        )}
+      </fieldset>
+    </form>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
 /*                                   ICONS                                    */
 /* -------------------------------------------------------------------------- */
+
+function SpinnerDot({ className = "h-3.5 w-3.5" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" aria-hidden>
+      <circle
+        cx="12"
+        cy="12"
+        r="9"
+        stroke="currentColor"
+        strokeOpacity="0.25"
+        strokeWidth="3"
+      />
+      <path
+        d="M21 12a9 9 0 0 0-9-9"
+        stroke="currentColor"
+        strokeWidth="3"
+        strokeLinecap="round"
+      >
+        <animateTransform
+          attributeName="transform"
+          type="rotate"
+          from="0 12 12"
+          to="360 12 12"
+          dur="0.9s"
+          repeatCount="indefinite"
+        />
+      </path>
+    </svg>
+  );
+}
 
 function IconArrowRight({ className = "h-4 w-4" }: { className?: string }) {
   return (

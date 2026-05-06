@@ -264,8 +264,16 @@ export function FeaturedVideos() {
             href="https://www.youtube.com/@kishwarc"
             target="_blank"
             rel="noopener noreferrer"
-            className="kc-btn-secondary inline-flex"
+            className="kc-btn-secondary inline-flex items-center gap-2"
           >
+            <svg
+              className="h-4 w-4"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              aria-hidden
+            >
+              <path d="M8 5v14l11-7z" />
+            </svg>
             View All Videos
           </a>
         </motion.div>

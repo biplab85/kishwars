@@ -4,7 +4,6 @@ import { useEffect, useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { gsap, registerGsap } from "@/lib/gsap";
 import { text } from "@/content/text";
-import { images } from "@/content/images";
 import { EditorialImage } from "@/components/media/EditorialImage";
 import { Reveal } from "@/components/motion/Reveal";
 
@@ -298,8 +297,8 @@ export function Manifesto() {
                     <div className="rounded-[1px] bg-cream/95 p-3 md:p-4">
                       <div className="relative">
                         <EditorialImage
-                          src={images.storyHeritage.src}
-                          alt="Heritage cuisine — Kishwar's culinary world."
+                          src="/images/cook.jpg"
+                          alt="Kishwar at the stove — preparing a heritage dish."
                           className="aspect-[4/5] w-full"
                           parallax={0.06}
                         />

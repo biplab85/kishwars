@@ -177,8 +177,8 @@ export function Gallery() {
           ))}
         </div>
 
-        {/* Tally + view-all hint */}
-        <div className="mt-12 flex items-center justify-between text-[11px] tracking-[0.4em] uppercase text-cream/50">
+        {/* Tally + view-all hint — stacked on mobile, flexed on desktop */}
+        <div className="mt-12 block space-y-3 text-[11px] tracking-[0.4em] uppercase text-cream/50 md:flex md:items-center md:justify-between md:space-y-0">
           <div className="flex items-center gap-3">
             <span aria-hidden className="block h-2 w-2 rounded-full bg-saffron" />
             <span>{galleryItems.length} frames · click to enlarge</span>
@@ -187,7 +187,7 @@ export function Gallery() {
             href="https://www.facebook.com/kishwarmasterchef/photos"
             target="_blank"
             rel="noopener noreferrer"
-            className="group inline-flex items-center gap-2 text-cream/70 transition-colors hover:text-saffron"
+            className="group inline-flex w-full items-center justify-center gap-2 rounded-full border border-cream/15 bg-cream/[0.04] px-5 py-3 text-cream/80 backdrop-blur-md transition-colors hover:bg-cream/[0.08] hover:text-saffron md:w-auto md:justify-start md:rounded-none md:border-0 md:bg-transparent md:p-0 md:text-cream/70 md:backdrop-blur-none"
           >
             See more on Facebook
             <span aria-hidden className="transition-transform duration-300 group-hover:translate-x-1">↗</span>

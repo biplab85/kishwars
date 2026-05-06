@@ -318,11 +318,6 @@ export function MasterChefMoment() {
                       borderBottomRightRadius: "4px",
                     }}
                   />
-                  {/* Frame badge */}
-                  <div className="absolute left-4 top-6 z-10 inline-flex items-center gap-2 rounded-full bg-ember/80 px-3 py-1 text-[10px] tracking-[0.4em] uppercase text-cream backdrop-blur-sm">
-                    <span aria-hidden className="block h-1 w-1 rounded-full bg-gold" />
-                    Plate Ⅰ
-                  </div>
                 </motion.div>
 
                 {/* SECONDARY — circular accent, overlapping bottom-right */}

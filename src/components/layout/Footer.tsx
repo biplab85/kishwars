@@ -3,9 +3,9 @@ import { text } from "@/content/text";
 import { Logo } from "@/components/layout/Logo";
 
 const resources = [
-  { label: "Press", href: "#press" },
+  { label: "Press", href: "/#press" },
   { label: "Inquiries", href: "mailto:hello@kishwar.com.au" },
-  { label: "Newsletter", href: "#newsletter" },
+  { label: "Newsletter", href: "/#newsletter" },
 ];
 
 type IconProps = { className?: string };
@@ -47,6 +47,42 @@ const navIcons: Record<string, (p: IconProps) => React.JSX.Element> = {
     <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.6} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
       <rect x="3" y="5" width="18" height="14" rx="2" />
       <path d="m3 7 9 6 9-6" />
+    </svg>
+  ),
+  About: ({ className }) => (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.6} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <circle cx="12" cy="8" r="3.5" />
+      <path d="M5 20c0-3.6 3.1-6 7-6s7 2.4 7 6" />
+    </svg>
+  ),
+  "My Book": ({ className }) => (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.6} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      {/* open spread book */}
+      <path d="M3 5c3-1 6-1 9 1 3-2 6-2 9-1v13c-3-1-6-1-9 1-3-2-6-2-9-1Z" />
+      <path d="M12 6v13" />
+    </svg>
+  ),
+  Recipes: ({ className }) => (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.6} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      {/* bowl + steam */}
+      <path d="M3 12h18" />
+      <path d="M5 12c0 4.4 3.1 8 7 8s7-3.6 7-8" />
+      <path d="M10 6c0 1.5-1 2-1 3.5M14 6c0 1.5-1 2-1 3.5" />
+    </svg>
+  ),
+  Collaboration: ({ className }) => (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.6} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      {/* two figures */}
+      <circle cx="8" cy="9" r="2.5" />
+      <circle cx="16" cy="9" r="2.5" />
+      <path d="M3 19c0-2.5 2-4.5 5-4.5s5 2 5 4.5" />
+      <path d="M11 19c0-2.5 2-4.5 5-4.5s5 2 5 4.5" />
+    </svg>
+  ),
+  Contact: ({ className }) => (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.6} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      {/* speech bubble */}
+      <path d="M3 11c0-4 4-7 9-7s9 3 9 7-4 7-9 7c-1 0-2-.1-3-.3L4 20l1-4c-1-1.5-2-3-2-5z" />
     </svg>
   ),
 };
@@ -112,9 +148,9 @@ export function Footer() {
   return (
     <footer className="relative overflow-hidden border-t border-cream/5 bg-ember">
       <div className="relative z-10 mx-auto w-full max-w-[1400px] px-6 py-16 md:px-10">
-        <div className="mb-12 grid gap-12 md:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_1fr] lg:gap-16">
+        <div className="mb-12 grid grid-cols-2 gap-x-6 gap-y-10 md:grid-cols-2 md:gap-12 lg:grid-cols-[2fr_1fr_1fr_1fr] lg:gap-16">
           {/* Brand + CTA */}
-          <div className="lg:pr-8">
+          <div className="col-span-2 md:col-span-1 lg:pr-8">
             <Link href="/" aria-label="Kishwar — home" className="mb-4 inline-block">
               <Logo size="lg" />
             </Link>
@@ -180,20 +216,33 @@ export function Footer() {
           </div>
 
           {/* Resources */}
-          <div>
+          <div className="col-span-2 md:col-span-1">
             <h4 className="mb-4 font-display font-semibold text-cream">Resources</h4>
             <ul className="space-y-3">
               {resources.map((r) => {
                 const Icon = resourceIcons[r.label];
+                const isExternal = r.href.startsWith("mailto:") || r.href.startsWith("http");
+                const className =
+                  "group inline-flex items-center gap-2.5 text-sm text-cream/60 transition-colors duration-300 hover:text-gold";
+                const inner = (
+                  <>
+                    {Icon && (
+                      <Icon className="h-4 w-4 text-cream/40 transition-colors group-hover:text-gold" />
+                    )}
+                    <span>{r.label}</span>
+                  </>
+                );
                 return (
                   <li key={r.label}>
-                    <a
-                      href={r.href}
-                      className="group inline-flex items-center gap-2.5 text-sm text-cream/60 transition-colors duration-300 hover:text-gold"
-                    >
-                      {Icon && <Icon className="h-4 w-4 text-cream/40 transition-colors group-hover:text-gold" />}
-                      <span>{r.label}</span>
-                    </a>
+                    {isExternal ? (
+                      <a href={r.href} className={className}>
+                        {inner}
+                      </a>
+                    ) : (
+                      <Link href={r.href} className={className}>
+                        {inner}
+                      </Link>
+                    )}
                   </li>
                 );
               })}
