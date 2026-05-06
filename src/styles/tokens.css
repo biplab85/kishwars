@@ -5,7 +5,9 @@
   --kc-smoke: 58 52 49;
   --kc-cream: 245 235 220;
 
-  /* Direct color aliases — for plain CSS / inline `style` consumers */
+  /* Direct color aliases — for plain CSS / inline `style` consumers.
+     These reference the triplets above, so they re-resolve when the
+     triplets are overridden by [data-theme="light"]. */
   --color-ember: rgb(var(--kc-ember));
   --color-smoke: rgb(var(--kc-smoke));
   --color-cream: rgb(var(--kc-cream));
@@ -27,6 +29,19 @@
   --space-gutter: clamp(1.25rem, 4vw, 3rem);
 
   --grain-opacity: 0.06;
+}
+
+/* Light theme — swap the three theme-aware color triplets.
+   Brand accents (saffron, gold, pomegranate) intentionally stay constant
+   so identity & gradient art look the same in either mode.
+   --kc-ember  → page background (becomes cream-ish)
+   --kc-cream  → primary foreground / text (becomes deep ember)
+   --kc-smoke  → secondary surface (becomes a warm sand) */
+[data-theme="light"] {
+  --kc-ember: 245 235 220;
+  --kc-smoke: 220 210 195;
+  --kc-cream: 30 22 18;
+  --grain-opacity: 0.04;
 }
 
 @media (prefers-reduced-motion: reduce) {

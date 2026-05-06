@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { text } from "@/content/text";
 import { cn } from "@/lib/utils/cn";
 import { Logo } from "@/components/layout/Logo";
+import { ThemeToggle } from "@/components/layout/ThemeToggle";
 
 export function Navigation() {
   const pathname = usePathname();
@@ -140,8 +141,8 @@ export function Navigation() {
             </ul>
           </nav>
 
-          {/* Channel CTA + mobile menu */}
-          <div className="flex items-center gap-4">
+          {/* Channel CTA + theme toggle + mobile menu */}
+          <div className="flex items-center gap-3">
             <a
               href={channelCta.href}
               target="_blank"
@@ -151,6 +152,7 @@ export function Navigation() {
               <span>{channelCta.label}</span>
               <span aria-hidden>↗</span>
             </a>
+            <ThemeToggle />
             <button
               type="button"
               onClick={() => setOpen((v) => !v)}
@@ -244,7 +246,7 @@ export function Navigation() {
               })}
             </ul>
           </nav>
-          <div className="mt-auto pb-12">
+          <div className="mt-auto flex items-center gap-3 pb-12">
             <a
               href={channelCta.href}
               target="_blank"
@@ -253,6 +255,7 @@ export function Navigation() {
             >
               {channelCta.label} <span aria-hidden>↗</span>
             </a>
+            <ThemeToggle size="md" />
           </div>
         </div>
       </div>
