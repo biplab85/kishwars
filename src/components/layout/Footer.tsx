@@ -210,31 +210,8 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Social */}
-          <div>
-            <h4 className="mb-4 font-display font-semibold text-cream">Social</h4>
-            <ul className="space-y-3">
-              {socials.map((s) => {
-                const Icon = socialIcons[s.label];
-                return (
-                  <li key={s.label}>
-                    <a
-                      href={s.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="group inline-flex items-center gap-2.5 text-sm text-cream/60 transition-colors duration-300 hover:text-cream"
-                    >
-                      {Icon && <Icon className="h-4 w-4 transition-transform duration-300 group-hover:scale-110" />}
-                      <span>{s.label}</span>
-                    </a>
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
-
           {/* Resources */}
-          <div className="col-span-2 md:col-span-1">
+          <div>
             <h4 className="mb-4 font-display font-semibold text-cream">Resources</h4>
             <ul className="space-y-3">
               {resources.map((r) => {
@@ -261,6 +238,30 @@ export function Footer() {
                         {inner}
                       </Link>
                     )}
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+
+          {/* Social */}
+          <div className="col-span-2 md:col-span-1">
+            <h4 className="mb-4 font-display font-semibold text-cream">Social</h4>
+            <ul className="flex items-center gap-5 md:block md:space-y-3">
+              {socials.map((s) => {
+                const Icon = socialIcons[s.label];
+                return (
+                  <li key={s.label}>
+                    <a
+                      href={s.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={s.label}
+                      className="group inline-flex items-center gap-2.5 text-sm text-cream/60 transition-colors duration-300 hover:text-cream"
+                    >
+                      {Icon && <Icon className="h-5 w-5 transition-transform duration-300 group-hover:scale-110 md:h-4 md:w-4" />}
+                      <span className="hidden md:inline">{s.label}</span>
+                    </a>
                   </li>
                 );
               })}
@@ -304,7 +305,7 @@ export function Footer() {
             <a
               href="#top"
               aria-label="Back to top"
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-cream/15 bg-cream/5 text-cream/60 backdrop-blur transition-colors hover:text-saffron"
+              className="hidden h-10 w-10 items-center justify-center rounded-full border border-cream/15 bg-cream/5 text-cream/60 backdrop-blur transition-colors hover:text-saffron md:flex"
             >
               <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden>
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" />

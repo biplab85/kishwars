@@ -192,7 +192,7 @@ export function Collaboration() {
               }}
             >
               <span className="text-cream">Let&rsquo;s create something </span>
-              <span className="inline-block bg-gradient-to-br from-saffron via-gold to-pomegranate bg-clip-text italic text-transparent pr-3">
+              <span className="inline-block bg-gradient-to-br from-saffron via-gold to-pomegranate bg-clip-text italic text-transparent pr-3 pb-[0.18em] leading-[1.1] align-baseline">
                 meaningful
               </span>
               <span className="text-cream"> together.</span>
@@ -442,7 +442,7 @@ export function Collaboration() {
       {/* COOKBOOK LAUNCH WINDOW */}
       <div className="relative z-10 mx-auto mt-32 max-w-[1100px] px-6 md:px-10">
         <Reveal variant="rise">
-          <div className="relative overflow-hidden rounded-3xl border border-cream/10 bg-gradient-to-br from-saffron/10 via-ember to-pomegranate/15 p-10 backdrop-blur-md md:p-16">
+          <div className="relative overflow-hidden rounded-3xl border border-cream/10 bg-gradient-to-br from-saffron/10 via-ember to-pomegranate/15 p-[15px] backdrop-blur-md md:p-16">
             <span
               aria-hidden
               className="pointer-events-none absolute -right-20 -top-20 h-72 w-72 rounded-full bg-gradient-to-br from-saffron/30 to-pomegranate/30 blur-3xl"
@@ -507,7 +507,7 @@ export function Collaboration() {
             }}
           >
             Talks shaped by the{" "}
-            <span className="inline-block italic bg-gradient-to-br from-saffron to-gold bg-clip-text text-transparent pr-2">
+            <span className="inline-block italic bg-gradient-to-br from-saffron to-gold bg-clip-text text-transparent pr-2 pb-[0.18em] leading-[1.1] align-baseline">
               kitchen, the country, the crossing
             </span>
             .
@@ -578,7 +578,7 @@ export function Collaboration() {
         className="relative z-10 mx-auto mt-32 max-w-[1100px] px-6 md:px-10"
       >
         <Reveal variant="rise">
-          <div className="relative overflow-hidden rounded-3xl border border-cream/10 bg-gradient-to-br from-pomegranate/30 via-ember to-saffron/20 p-10 md:p-14">
+          <div className="relative overflow-hidden rounded-3xl border border-cream/10 bg-gradient-to-br from-pomegranate/30 via-ember to-saffron/20 p-[15px] md:p-14">
             <motion.div
               aria-hidden
               className="pointer-events-none absolute -inset-1/2 -z-0"
@@ -614,9 +614,24 @@ export function Collaboration() {
                   <span aria-hidden className="h-px w-8 bg-cream/30" />
                   <a
                     href="mailto:hello@kishwar.com.au"
-                    className="text-cream underline decoration-saffron/70 underline-offset-4 transition-colors duration-300 hover:text-saffron"
+                    className="group relative inline-block text-cream transition-colors duration-300 hover:text-saffron"
                   >
                     hello@kishwar.com.au
+                    <svg
+                      aria-hidden
+                      viewBox="0 0 200 10"
+                      preserveAspectRatio="none"
+                      fill="none"
+                      className="pointer-events-none absolute left-0 top-full -mt-0.5 h-[7px] w-full overflow-visible text-saffron/70 transition-colors duration-300 group-hover:text-saffron"
+                    >
+                      <path
+                        d="M2 5 C 30 2, 60 8, 100 5 S 170 3, 198 6"
+                        stroke="currentColor"
+                        strokeWidth="1.6"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
                   </a>
                 </p>
               </div>

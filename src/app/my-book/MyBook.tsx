@@ -109,7 +109,7 @@ export function MyBook() {
               }}
             >
               <span className="text-cream">Smoke </span>
-              <span className="bg-gradient-to-br from-saffron via-gold to-pomegranate bg-clip-text italic text-transparent">
+              <span className="inline-block bg-gradient-to-br from-saffron via-gold to-pomegranate bg-clip-text italic text-transparent py-[0.12em] pr-[0.08em] leading-[1.1] align-baseline">
                 Rice
               </span>
               <span className="text-cream"> Water.</span>
@@ -499,7 +499,7 @@ export function MyBook() {
       <Parallax range={30}>
       <div className="relative z-10 mx-auto mt-32 max-w-[1100px] px-6 md:px-10">
         <Reveal variant="rise">
-          <div className="relative overflow-hidden rounded-3xl border border-cream/10 bg-gradient-to-br from-pomegranate/30 via-ember to-saffron/20 p-10 md:p-14">
+          <div className="relative overflow-hidden rounded-3xl border border-cream/10 bg-gradient-to-br from-pomegranate/30 via-ember to-saffron/20 p-[15px] md:p-14">
             <motion.div
               aria-hidden
               className="pointer-events-none absolute -inset-1/2 -z-0"

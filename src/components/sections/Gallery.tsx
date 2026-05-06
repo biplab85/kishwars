@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { Fancybox } from "@fancyapps/ui";
 import "@fancyapps/ui/dist/fancybox/fancybox.css";
 import { gsap, registerGsap } from "@/lib/gsap";
@@ -183,15 +184,13 @@ export function Gallery() {
             <span aria-hidden className="block h-2 w-2 rounded-full bg-saffron" />
             <span>{galleryItems.length} frames · click to enlarge</span>
           </div>
-          <a
-            href="https://www.facebook.com/kishwarmasterchef/photos"
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            href="/gallery"
             className="group inline-flex w-full items-center justify-center gap-2 rounded-full border border-cream/15 bg-cream/[0.04] px-5 py-3 text-cream/80 backdrop-blur-md transition-colors hover:bg-cream/[0.08] hover:text-saffron md:w-auto md:justify-start md:rounded-none md:border-0 md:bg-transparent md:p-0 md:text-cream/70 md:backdrop-blur-none"
           >
-            See more on Facebook
+            See more
             <span aria-hidden className="transition-transform duration-300 group-hover:translate-x-1">↗</span>
-          </a>
+          </Link>
         </div>
       </div>
     </section>

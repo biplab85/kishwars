@@ -392,7 +392,7 @@ export function Recipes() {
                 }}
               >
                 The kitchen,{" "}
-                <span className="inline-block italic bg-gradient-to-br from-saffron to-gold bg-clip-text text-transparent pr-2">
+                <span className="inline-block italic bg-gradient-to-br from-saffron to-gold bg-clip-text text-transparent pr-2 pb-[0.18em] leading-[1.1] align-baseline">
                   arranged
                 </span>{" "}
                 as a book.
@@ -433,7 +433,7 @@ export function Recipes() {
                 }}
               >
                 Eighteen stories,{" "}
-                <span className="inline-block italic bg-gradient-to-br from-saffron to-gold bg-clip-text text-transparent pr-2">
+                <span className="inline-block italic bg-gradient-to-br from-saffron to-gold bg-clip-text text-transparent pr-2 pb-[0.18em] leading-[1.1] align-baseline">
                   beginning here
                 </span>
                 .
@@ -518,7 +518,7 @@ export function Recipes() {
       <Parallax range={30}>
       <div className="relative z-10 mx-auto mt-32 max-w-[1100px] px-6 md:px-10">
         <Reveal variant="rise">
-          <div className="relative overflow-hidden rounded-3xl border border-cream/10 bg-gradient-to-br from-pomegranate/30 via-ember to-saffron/20 p-10 md:p-14">
+          <div className="relative overflow-hidden rounded-3xl border border-cream/10 bg-gradient-to-br from-pomegranate/30 via-ember to-saffron/20 p-[15px] md:p-14">
             <motion.div
               aria-hidden
               className="pointer-events-none absolute -inset-1/2 -z-0"

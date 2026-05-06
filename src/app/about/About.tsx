@@ -46,7 +46,7 @@ export function About() {
                 }}
               >
                 <span className="text-cream">Preserving Bengali heritage </span>
-                <span className="inline-block bg-gradient-to-br from-saffron via-gold to-pomegranate bg-clip-text italic text-transparent pr-3">
+                <span className="inline-block bg-gradient-to-br from-saffron via-gold to-pomegranate bg-clip-text italic text-transparent pr-3 pb-[0.18em] leading-[1.1] align-baseline">
                   through food
                 </span>
                 <span className="text-cream">.</span>

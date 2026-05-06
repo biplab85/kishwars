@@ -159,10 +159,25 @@ export function Contact() {
           <Reveal variant="fade" delay={0.1}>
             <a
               href="mailto:hello@kishwar.com.au"
-              className="mt-8 inline-block font-display text-cream underline decoration-saffron/70 underline-offset-[6px] transition-colors duration-300 hover:text-saffron"
+              className="group relative mt-8 inline-block font-display text-cream transition-colors duration-300 hover:text-saffron"
               style={{ fontSize: "clamp(1.2rem, 1.6vw, 1.5rem)", letterSpacing: "-0.005em" }}
             >
               hello@kishwar.com.au
+              <svg
+                aria-hidden
+                viewBox="0 0 200 12"
+                preserveAspectRatio="none"
+                fill="none"
+                className="pointer-events-none absolute left-0 top-full mt-1 h-[10px] w-full overflow-visible text-saffron/70 transition-colors duration-300 group-hover:text-saffron"
+              >
+                <path
+                  d="M2 6 C 30 2, 60 10, 100 6 S 170 3, 198 7"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
             </a>
 
             <p className="mt-8 max-w-[42ch] text-cream/65 leading-relaxed">
@@ -206,7 +221,29 @@ export function Contact() {
         </div>
 
         {/* Form */}
-        <div className="md:col-span-7">
+        <div className="relative md:col-span-7">
+          {/* Hand-drawn spiral arrow at top-right corner — gently bobs up & down */}
+          <motion.div
+            aria-hidden
+            className="pointer-events-none absolute right-1 -top-4 z-10 text-saffron/75 md:-top-8 md:right-2"
+            animate={{ y: [0, 7, 0] }}
+            transition={{ duration: 2.6, repeat: Infinity, ease: "easeInOut" }}
+          >
+            <svg
+              viewBox="0 0 100 100"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="h-[84px] w-[84px] md:h-[110px] md:w-[110px]"
+            >
+              {/* Spiral coil at top-right, then sweeping curve down-left toward the form */}
+              <path d="M78 10 C 94 12, 94 34, 78 34 C 62 34, 62 14, 78 14 C 90 14, 88 26, 72 36 C 56 48, 46 64, 36 78" />
+              {/* Hand-drawn chevron arrowhead pointing down-left */}
+              <path d="M28 68 L 36 80 L 50 76" />
+            </svg>
+          </motion.div>
           <Reveal variant="rise" delay={0.1}>
             <ContactForm />
           </Reveal>
@@ -989,7 +1026,7 @@ function ContactForm() {
     <form
       noValidate
       onSubmit={handleSubmit}
-      className="relative overflow-hidden rounded-3xl border border-cream/10 bg-gradient-to-br from-pomegranate/15 via-ember to-saffron/10 p-8 backdrop-blur-md md:p-12"
+      className="relative overflow-hidden rounded-3xl border border-cream/10 bg-gradient-to-br from-pomegranate/15 via-ember to-saffron/10 p-[15px] backdrop-blur-md md:p-12"
     >
       <span
         aria-hidden
