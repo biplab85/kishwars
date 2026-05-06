@@ -18,7 +18,15 @@ export function PullQuote() {
   const { text: quote, attribution } = text.pullQuote;
 
   return (
-    <section className="relative overflow-hidden bg-cream py-[var(--space-section)] text-ember">
+    <section
+      className="relative overflow-hidden bg-cream py-[var(--space-section)] text-ember"
+      // Lock palette so children using text-ember / border-ember / etc.
+      // keep the intended dark-on-cream rendering in light mode too.
+      style={{
+        ["--kc-ember" as string]: "14 11 9",
+        ["--kc-cream" as string]: "245 235 220",
+      }}
+    >
       {/* Animated background */}
       <div aria-hidden className="pointer-events-none absolute inset-0 z-0">
         <div
@@ -338,7 +346,7 @@ export function PullQuote() {
                   {/* Inner ember frame */}
                   <div className="rounded-[2px] bg-ember p-[3px]">
                     {/* Matte (paper) */}
-                    <div className="rounded-[1px] bg-cream/95 p-3 md:p-5">
+                    <div className="rounded-[1px] bg-[rgba(245,235,220,0.95)] p-3 md:p-5">
                       {/* Image with reveal + parallax */}
                       <div className="relative">
                         <EditorialImage

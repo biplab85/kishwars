@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Fraunces, Inter } from "next/font/google";
 import { LenisProvider } from "@/lib/lenis/LenisProvider";
+import { ThemeProvider, themeInitScript } from "@/lib/theme/ThemeProvider";
 import { rootMetadata, personJsonLd, websiteJsonLd, bookJsonLd } from "@/lib/seo/metadata";
 import "./globals.css";
 
@@ -25,11 +26,6 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-// Runs synchronously before first paint to set `data-theme` on <html>,
-// preventing a flash of the wrong theme. Reads localStorage("kc-theme")
-// then falls back to the default (dark).
-const themeInitScript = `(()=>{try{var t=localStorage.getItem("kc-theme");if(t==="light"){document.documentElement.setAttribute("data-theme","light");}}catch(e){}})();`;
-
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const ldJson = [personJsonLd(), websiteJsonLd(), bookJsonLd()];
 
@@ -37,12 +33,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html
       lang="en"
       className={`${display.variable} ${sans.variable}`}
+      suppressHydrationWarning
     >
       <head>
+        {/* Sets data-theme on <html> before React hydrates — prevents
+            a flash of the wrong theme on first paint. */}
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
       <body className="antialiased">
-        <LenisProvider>{children}</LenisProvider>
+        <ThemeProvider>
+          <LenisProvider>{children}</LenisProvider>
+        </ThemeProvider>
 
         <script
           type="application/ld+json"

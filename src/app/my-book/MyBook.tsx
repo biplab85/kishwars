@@ -703,7 +703,7 @@ function FloatingCover() {
 
       {/* Frame */}
       <div className="relative z-10 rounded-[4px] bg-ember p-[3px] shadow-[0_40px_80px_-30px_rgba(122,31,43,0.6)]">
-        <div className="rounded-[3px] bg-cream/95 p-3 md:p-4">
+        <div className="rounded-[3px] bg-[rgba(245,235,220,0.95)] p-3 md:p-4">
           <div className="relative">
             <Image
               src={book.cover}

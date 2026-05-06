@@ -450,10 +450,7 @@ export function Recipes() {
           {recipeIndex.map((r, i) => (
             <Reveal key={r.name} variant="fade" delay={Math.min(i * 0.04, 0.4)}>
               <li className="group">
-                <a
-                  href="#all-recipes"
-                  className="grid grid-cols-1 items-baseline gap-3 py-7 transition-[padding-left,color] duration-500 ease-cinematic hover:pl-4 md:grid-cols-12 md:gap-8"
-                >
+                <div className="grid grid-cols-1 items-baseline gap-3 py-7 md:grid-cols-12 md:gap-8">
                   <span className="font-display text-[11px] tracking-[0.4em] uppercase text-saffron md:col-span-1">
                     {r.number}
                   </span>
@@ -466,13 +463,10 @@ export function Recipes() {
                   <span className="text-[10px] tracking-[0.32em] uppercase text-cream/45 md:col-span-3">
                     {r.category}
                   </span>
-                  <span className="font-display italic text-cream/75 md:col-span-4 leading-relaxed">
+                  <span className="font-display italic text-cream/75 md:col-span-5 leading-relaxed">
                     {r.whisper}
                   </span>
-                  <span className="text-[10px] tracking-[0.4em] uppercase text-cream/45 transition-colors duration-300 group-hover:text-saffron md:col-span-1 md:text-right">
-                    Read →
-                  </span>
-                </a>
+                </div>
               </li>
             </Reveal>
           ))}
@@ -740,8 +734,7 @@ function EditorialFrame() {
 
 function CategoryTile({ numeral, name, whisper, count, image }: Category) {
   return (
-    <a
-      href="#all-recipes"
+    <div
       className="group relative block aspect-[3/4] overflow-hidden rounded-2xl border border-cream/10 bg-smoke/30 transition-[transform,border-color,box-shadow] duration-500 ease-cinematic hover:-translate-y-2 hover:border-saffron/45 hover:shadow-[0_30px_60px_-22px_rgba(122,31,43,0.6)]"
     >
       {/* Real image */}
@@ -753,11 +746,6 @@ function CategoryTile({ numeral, name, whisper, count, image }: Category) {
         className="object-cover transition-transform duration-[1100ms] ease-cinematic group-hover:scale-[1.08]"
       />
 
-      {/* Dark gradient overlay for text legibility */}
-      <div
-        aria-hidden
-        className="absolute inset-0 bg-gradient-to-t from-ember via-ember/55 to-ember/15 transition-opacity duration-500 group-hover:from-ember/95 group-hover:via-ember/35 group-hover:to-ember/5"
-      />
       {/* Bottom anchor gradient — keeps text crisp */}
       <div
         aria-hidden
@@ -808,14 +796,8 @@ function CategoryTile({ numeral, name, whisper, count, image }: Category) {
         <p className="mt-4 line-clamp-1 text-[10px] tracking-[0.32em] uppercase text-cream/50">
           {count}
         </p>
-        <span className="mt-5 inline-flex items-center gap-2 text-[11px] tracking-[0.4em] uppercase text-cream/65 transition-colors duration-300 group-hover:text-saffron">
-          Open chapter
-          <span aria-hidden className="transition-transform duration-300 group-hover:translate-x-1">
-            ↗
-          </span>
-        </span>
       </div>
-    </a>
+    </div>
   );
 }
 /* -------------------------------------------------------------------------- */

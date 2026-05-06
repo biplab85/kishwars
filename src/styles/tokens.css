@@ -5,9 +5,7 @@
   --kc-smoke: 58 52 49;
   --kc-cream: 245 235 220;
 
-  /* Direct color aliases — for plain CSS / inline `style` consumers.
-     These reference the triplets above, so they re-resolve when the
-     triplets are overridden by [data-theme="light"]. */
+  /* Direct color aliases — for plain CSS / inline `style` consumers */
   --color-ember: rgb(var(--kc-ember));
   --color-smoke: rgb(var(--kc-smoke));
   --color-cream: rgb(var(--kc-cream));
@@ -31,17 +29,42 @@
   --grain-opacity: 0.06;
 }
 
-/* Light theme — swap the three theme-aware color triplets.
-   Brand accents (saffron, gold, pomegranate) intentionally stay constant
-   so identity & gradient art look the same in either mode.
-   --kc-ember  → page background (becomes cream-ish)
-   --kc-cream  → primary foreground / text (becomes deep ember)
-   --kc-smoke  → secondary surface (becomes a warm sand) */
+/* Light theme — `<html data-theme="light">` swaps the surface/ink RGB triplets.
+   Tailwind utilities (bg-ember, text-cream, bg-cream/10, etc.) and the
+   var(--color-*) aliases re-resolve at use time, so no class changes are
+   needed anywhere in the codebase to support light mode. */
 [data-theme="light"] {
-  --kc-ember: 245 235 220;
-  --kc-smoke: 220 210 195;
-  --kc-cream: 30 22 18;
-  --grain-opacity: 0.04;
+  --kc-ember: 245 235 220;   /* surface — was the cream */
+  --kc-smoke: 200 188 172;   /* mid tone — light warm gray */
+  --kc-cream: 26 18 12;      /* ink — deep warm dark */
+
+  /* Re-define the rgb() aliases too so any consumer that reads them
+     directly (inline styles, raw CSS) gets the swapped values without
+     relying on nested var() resolution. */
+  --color-ember: rgb(var(--kc-ember));
+  --color-smoke: rgb(var(--kc-smoke));
+  --color-cream: rgb(var(--kc-cream));
+
+  --grain-opacity: 0.04;     /* tone the noise overlay down on a light surface */
+}
+
+/* A few sections paint a full-coverage dark SVG mesh on top of their
+   surface (Manifesto, SignatureStory, MasterChefMoment) — hardcoded
+   hex stops baked into a SMIL animation. In light mode we hide that
+   base mesh so the section's `bg-ember` (now cream) shows through.
+   The decorative coloured blobs / ink strokes that sit *on top* of
+   the mesh stay visible. */
+[data-theme="light"] .kc-mesh-dark-base {
+  display: none;
+}
+
+/* The /contact hero map is hand-illustrated as a dark "night cartography"
+   SVG — every gradient stop and label fill is a dark warm tone baked
+   into the markup. Rewriting all of them per-theme would be brittle, so
+   in light mode we tonally invert the map into a warm "day cartography"
+   look while preserving its color relationships. */
+[data-theme="light"] .kc-map-night {
+  filter: invert(0.92) sepia(0.18) saturate(0.85) brightness(1.04) hue-rotate(-8deg);
 }
 
 @media (prefers-reduced-motion: reduce) {

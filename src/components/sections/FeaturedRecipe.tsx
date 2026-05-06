@@ -124,6 +124,14 @@ export function FeaturedRecipe() {
     <section
       ref={root}
       className="relative overflow-hidden bg-cream py-[var(--space-section)] text-ember"
+      // Lock this section's palette to the original "light card" values.
+      // By scoping --kc-ember / --kc-cream here, every theme-aware utility
+      // inside (text-ember, bg-ember/5, border-ember/40, …) keeps the
+      // intended dark-on-cream styling in light mode too.
+      style={{
+        ["--kc-ember" as string]: "14 11 9",
+        ["--kc-cream" as string]: "245 235 220",
+      }}
     >
       {/* Premium animated background — cookbook paper */}
       <div aria-hidden className="pointer-events-none absolute inset-0 z-0">

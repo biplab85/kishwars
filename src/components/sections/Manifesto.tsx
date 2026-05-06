@@ -122,7 +122,7 @@ export function Manifesto() {
           </defs>
 
           {/* Base mesh */}
-          <rect width="100%" height="100%" fill="url(#kc-manifesto-bg)" />
+          <rect className="kc-mesh-dark-base" width="100%" height="100%" fill="url(#kc-manifesto-bg)" />
 
           {/* Drifting ink-stain blob — top-left, slow horizontal wander */}
           <motion.ellipse
@@ -294,7 +294,7 @@ export function Manifesto() {
                 {/* Outer gradient frame */}
                 <div className="rounded-[3px] bg-gradient-to-br from-pomegranate via-saffron to-gold p-[2px] shadow-2xl shadow-pomegranate/30">
                   <div className="rounded-[2px] bg-ember p-[3px]">
-                    <div className="rounded-[1px] bg-cream/95 p-3 md:p-4">
+                    <div className="rounded-[1px] bg-[rgba(245,235,220,0.95)] p-3 md:p-4">
                       <div className="relative">
                         <EditorialImage
                           src="/images/cook.jpg"

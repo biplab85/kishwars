@@ -1,5 +1,9 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { text } from "@/content/text";
+import { cn } from "@/lib/utils/cn";
 import { Logo } from "@/components/layout/Logo";
 
 const resources = [
@@ -118,7 +122,10 @@ const socialIcons: Record<string, (p: IconProps) => React.JSX.Element> = {
     </svg>
   ),
   "X / Twitter": ({ className }) => (
-    <svg className={className} viewBox="0 0 24 24" fill="#FFFFFF" aria-hidden>
+    // X's brand mark is black-on-white / white-on-black depending on surface.
+    // Using currentColor lets it inherit the theme-aware text color from the
+    // parent link, so it stays visible in both dark and light mode.
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor" aria-hidden>
       <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
     </svg>
   ),
@@ -156,12 +163,18 @@ const resourceIcons: Record<string, (p: IconProps) => React.JSX.Element> = {
 const HIDDEN_FROM_NAV = ["Home", "Story", "Videos", "Press", "Cookbook", "Newsletter"];
 
 export function Footer() {
+  const pathname = usePathname();
   const { socials, legal } = text.footer;
   const navItems = text.nav.items.filter(
     (item) => !HIDDEN_FROM_NAV.includes(item.label),
   );
   const channel = text.nav.channelCta;
   const year = new Date().getFullYear();
+
+  // A footer link is "active" when the user is currently on its route.
+  // Hash-only and external links (mailto, http) never highlight.
+  const isActiveLink = (href: string) =>
+    href.startsWith("/") && !href.startsWith("/#") && pathname === href;
 
   return (
     <footer className="relative overflow-hidden border-t border-cream/5 bg-ember">
@@ -195,15 +208,37 @@ export function Footer() {
             <ul className="space-y-3">
               {navItems.map((item) => {
                 const Icon = navIcons[item.label];
+                const isActive = isActiveLink(item.href);
+                const isExternal = item.href.startsWith("http") || item.href.startsWith("mailto:");
+                const linkCls = cn(
+                  "group inline-flex items-center gap-2.5 text-sm transition-colors duration-300",
+                  isActive ? "text-saffron" : "text-cream/60 hover:text-cream",
+                );
+                const iconCls = cn(
+                  "h-4 w-4 transition-colors group-hover:text-saffron",
+                  isActive ? "text-saffron" : "text-cream/40",
+                );
+                const inner = (
+                  <>
+                    {Icon && <Icon className={iconCls} />}
+                    <span>{item.label}</span>
+                  </>
+                );
                 return (
                   <li key={item.href}>
-                    <a
-                      href={item.href}
-                      className="group inline-flex items-center gap-2.5 text-sm text-cream/60 transition-colors duration-300 hover:text-cream"
-                    >
-                      {Icon && <Icon className="h-4 w-4 text-cream/40 transition-colors group-hover:text-saffron" />}
-                      <span>{item.label}</span>
-                    </a>
+                    {isExternal ? (
+                      <a href={item.href} className={linkCls}>
+                        {inner}
+                      </a>
+                    ) : (
+                      <Link
+                        href={item.href}
+                        className={linkCls}
+                        aria-current={isActive ? "page" : undefined}
+                      >
+                        {inner}
+                      </Link>
+                    )}
                   </li>
                 );
               })}
@@ -217,13 +252,18 @@ export function Footer() {
               {resources.map((r) => {
                 const Icon = resourceIcons[r.label];
                 const isExternal = r.href.startsWith("mailto:") || r.href.startsWith("http");
-                const className =
-                  "group inline-flex items-center gap-2.5 text-sm text-cream/60 transition-colors duration-300 hover:text-gold";
+                const isActive = isActiveLink(r.href);
+                const className = cn(
+                  "group inline-flex items-center gap-2.5 text-sm transition-colors duration-300",
+                  isActive ? "text-gold" : "text-cream/60 hover:text-gold",
+                );
+                const iconCls = cn(
+                  "h-4 w-4 transition-colors group-hover:text-gold",
+                  isActive ? "text-gold" : "text-cream/40",
+                );
                 const inner = (
                   <>
-                    {Icon && (
-                      <Icon className="h-4 w-4 text-cream/40 transition-colors group-hover:text-gold" />
-                    )}
+                    {Icon && <Icon className={iconCls} />}
                     <span>{r.label}</span>
                   </>
                 );
@@ -234,7 +274,11 @@ export function Footer() {
                         {inner}
                       </a>
                     ) : (
-                      <Link href={r.href} className={className}>
+                      <Link
+                        href={r.href}
+                        className={className}
+                        aria-current={isActive ? "page" : undefined}
+                      >
                         {inner}
                       </Link>
                     )}
@@ -287,7 +331,7 @@ export function Footer() {
           </div>
           <div className="flex items-center gap-5">
             <a
-              href="https://sklentr.com/"
+              href="https://www.capsuledigital.com.au/"
               target="_blank"
               rel="noopener noreferrer"
               className="group inline-flex items-center gap-1.5 text-sm text-cream/60 transition-colors hover:text-cream"
@@ -300,7 +344,7 @@ export function Footer() {
               >
                 <path d="M12 21s-7.5-4.6-9.5-9.2C1 8.6 2.6 5 6.2 5c2 0 3.5 1.1 4.4 2.6h2.8C14.3 6.1 15.8 5 17.8 5c3.6 0 5.2 3.6 3.7 6.8C19.5 16.4 12 21 12 21z" />
               </svg>
-              <span className="font-display font-semibold">Sklentr.</span>
+              <span className="font-display font-semibold">CapsuleDIGITAL</span>
             </a>
             <a
               href="#top"

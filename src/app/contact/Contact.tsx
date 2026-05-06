@@ -44,7 +44,7 @@ export function Contact() {
     >
       <AnimatedMesh />
 
-      {/* HERO — editorial spread: copy left, navigational chart right */}
+      {/* HERO — editorial spread: copy left, animated signal mark right */}
       <div className="relative z-10 mx-auto max-w-[1400px] px-6 md:px-10">
         <div className="grid grid-cols-1 items-center gap-14 lg:grid-cols-12 lg:gap-20">
           <div className="lg:col-span-7">
@@ -122,10 +122,11 @@ export function Contact() {
             </Reveal>
           </div>
 
-          {/* RIGHT — navigational chart frame */}
-          <div className="lg:col-span-5">
+          {/* RIGHT — animated outbound-signal mark (envelope + concentric rings).
+              Hidden on mobile/tablet; only renders at lg breakpoint and above. */}
+          <div className="hidden lg:col-span-5 lg:block">
             <Reveal variant="rise" delay={0.2}>
-              <LocationChart />
+              <ContactSignal />
             </Reveal>
           </div>
         </div>
@@ -426,7 +427,7 @@ function MelbourneMapSvg() {
     <svg
       viewBox="0 0 320 320"
       preserveAspectRatio="xMidYMid slice"
-      className="absolute inset-0 h-full w-full"
+      className="kc-map-night absolute inset-0 h-full w-full"
       aria-label="Editorial map of central Melbourne"
     >
       <defs>
@@ -792,6 +793,177 @@ function MelbourneMapSvg() {
 /* -------------------------------------------------------------------------- */
 
 /**
+ * Editorial "outbound signal" mark — a hand-drawn envelope with a wax seal
+ * at the centre, three concentric signal rings continuously radiating outward,
+ * compass-style cardinal ticks on a dotted outer perimeter, a soft drifting
+ * halo, and a subtle eyebrow caption. Every motion runs on a different
+ * duration so the loop reads organic rather than mechanical.
+ *
+ * Theme-aware: stroke uses currentColor (text-cream → swaps cream/ink with
+ * the theme); the saffron→gold→pomegranate gradient on the rings & seal
+ * stays constant because those are brand accents that read on either surface.
+ */
+function ContactSignal() {
+  return (
+    <motion.div
+      className="relative mx-auto w-full max-w-[460px]"
+      animate={{ y: [0, -6, 0] }}
+      transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
+    >
+      {/* Soft drifting halo behind the mark */}
+      <motion.div
+        aria-hidden
+        className="pointer-events-none absolute -inset-10 -z-10 rounded-[42%] bg-gradient-to-br from-saffron/30 via-gold/20 to-pomegranate/25 blur-3xl"
+        animate={{ scale: [1, 1.08, 1], opacity: [0.55, 0.95, 0.55] }}
+        transition={{ duration: 11, repeat: Infinity, ease: "easeInOut" }}
+      />
+
+      <div className="relative aspect-square text-cream">
+        <svg
+          viewBox="0 0 400 400"
+          className="absolute inset-0 h-full w-full"
+          aria-label="Open inbox — outbound signal mark"
+        >
+          <defs>
+            {/* Saffron → gold → pomegranate sweep, used on rings + seal + envelope */}
+            <linearGradient id="kc-cs-gold" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#E2761B" />
+              <stop offset="50%" stopColor="#C9A24A" />
+              <stop offset="100%" stopColor="#7A1F2B" />
+            </linearGradient>
+            <radialGradient id="kc-cs-seal">
+              <stop offset="0%" stopColor="#E2761B" />
+              <stop offset="65%" stopColor="#C9A24A" />
+              <stop offset="100%" stopColor="#7A1F2B" />
+            </radialGradient>
+          </defs>
+
+          {/* Compass-style cardinal ticks — premium navigational hint */}
+          <g stroke="currentColor" strokeWidth="1" strokeLinecap="round" opacity="0.22">
+            <line x1="200" y1="14" x2="200" y2="32" />
+            <line x1="200" y1="368" x2="200" y2="386" />
+            <line x1="14" y1="200" x2="32" y2="200" />
+            <line x1="368" y1="200" x2="386" y2="200" />
+          </g>
+
+          {/* Outer dotted perimeter ring */}
+          <circle
+            cx="200"
+            cy="200"
+            r="180"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="0.6"
+            strokeDasharray="2 7"
+            opacity="0.22"
+          />
+
+          {/* Subtle inner reference ring */}
+          <circle
+            cx="200"
+            cy="200"
+            r="120"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="0.5"
+            opacity="0.15"
+          />
+
+          {/* Centre envelope — line-art, breathes gently */}
+          <motion.g
+            transform="translate(200 200)"
+            animate={{ scale: [1, 1.035, 1] }}
+            transition={{ duration: 3.8, repeat: Infinity, ease: "easeInOut" }}
+            style={{ transformOrigin: "200px 200px" }}
+          >
+            {/* Envelope body */}
+            <rect
+              x="-50"
+              y="-32"
+              width="100"
+              height="64"
+              rx="2.5"
+              fill="rgb(var(--kc-ember) / 0.55)"
+              stroke="url(#kc-cs-gold)"
+              strokeWidth="1.8"
+            />
+            {/* Triangular flap — folded down, meets at the seal */}
+            <path
+              d="M -50 -32 L 0 6 L 50 -32"
+              fill="none"
+              stroke="url(#kc-cs-gold)"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            {/* Bottom inner crease — adds depth */}
+            <path
+              d="M -48 30 L -8 4 M 8 4 L 48 30"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="0.9"
+              strokeLinecap="round"
+              opacity="0.28"
+            />
+
+            {/* Wax seal — gold gradient, pulses */}
+            <motion.g
+              animate={{ scale: [1, 1.18, 1] }}
+              transition={{ duration: 2.6, repeat: Infinity, ease: "easeInOut" }}
+              style={{ transformOrigin: "0 0" }}
+            >
+              <circle
+                cx="0"
+                cy="0"
+                r="9"
+                fill="url(#kc-cs-seal)"
+                stroke="rgb(var(--kc-cream) / 0.85)"
+                strokeWidth="0.8"
+              />
+              {/* Tiny "K" monogram pressed into the wax */}
+              <path
+                d="M -2.6 -3.4 L -2.6 3.4 M -2.6 0 L 2.4 -3.4 M -2.6 0 L 2.4 3.4"
+                stroke="rgb(var(--kc-ember) / 0.85)"
+                strokeWidth="1"
+                strokeLinecap="round"
+                fill="none"
+              />
+            </motion.g>
+          </motion.g>
+
+          {/* Editorial eyebrow caption */}
+          <text
+            x="200"
+            y="358"
+            textAnchor="middle"
+            fontSize="9"
+            letterSpacing="3.4"
+            fill="currentColor"
+            opacity="0.55"
+            style={{ fontFamily: "var(--font-display), Georgia, serif" }}
+          >
+            INBOX · OPEN
+          </text>
+          <text
+            x="200"
+            y="372"
+            textAnchor="middle"
+            fontSize="7"
+            letterSpacing="0.5"
+            fill="currentColor"
+            opacity="0.4"
+            fontStyle="italic"
+            style={{ fontFamily: "var(--font-display), Georgia, serif" }}
+          >
+            every email is read
+          </text>
+        </svg>
+      </div>
+    </motion.div>
+  );
+}
+
+/**
  * Hand-drawn parchment-style map of central Melbourne, framed in editorial
  * gold treatment with an animated saffron pin overlay, coordinate ribbon,
  * and a "View on Google Maps" link.
@@ -814,12 +986,11 @@ function LocationChart() {
         transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
       />
 
-      {/* Gradient ring wrapper — refined gilded edge that follows the rounded corners */}
-      <div className="relative rounded-[28px] bg-gradient-to-br from-saffron/55 via-gold/70 to-pomegranate/55 p-[1px] shadow-[0_40px_100px_-40px_rgba(0,0,0,0.7),0_0_0_1px_rgba(201,162,74,0.08)]">
-      {/* Inner cream hairline — sits just inside the gold ring for that triple-rule feel */}
-      <div className="relative aspect-square overflow-hidden rounded-[27px] bg-ember ring-1 ring-inset ring-cream/[0.08]">
-        {/* Hand-drawn parchment map of central Melbourne — Google-Maps style */}
-        <MelbourneMapSvg />
+      {/* Borderless square — bg swaps with theme, no ring/edge.
+          Drop shadow kept for depth on both surfaces. Map content
+          intentionally blank: the pin / plaque / caption ribbon below
+          sit on the clean themed surface. */}
+      <div className="relative aspect-square overflow-hidden rounded-[28px] bg-ember shadow-[0_40px_100px_-40px_rgba(0,0,0,0.7)]">
 
         {/* Pin overlay — centered on Collins/Swanston (50%, 50%) */}
         <div
@@ -914,7 +1085,6 @@ function LocationChart() {
           </a>
         </div>
 
-      </div>
       </div>
     </motion.div>
   );

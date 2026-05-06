@@ -114,10 +114,9 @@ export function Gallery() {
         const offset = i % 2 === 0 ? -40 : 40;
         gsap.fromTo(
           item,
-          { y: offset, opacity: 0.6 },
+          { y: offset },
           {
             y: -offset,
-            opacity: 1,
             ease: "none",
             scrollTrigger: {
               trigger: r,

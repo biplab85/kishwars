@@ -130,7 +130,12 @@ export function Navigation() {
                         {underline}
                       </a>
                     ) : (
-                      <Link href={isHash ? `/${item.href}` : item.href} className={className}>
+                      <Link
+                        // "#top" from a non-home page should be a clean "/" — not "/#top".
+                        // Other hash links (#story, #videos, …) still go to /<hash>.
+                        href={isHash ? (item.href === "#top" ? "/" : `/${item.href}`) : item.href}
+                        className={className}
+                      >
                         {item.label}
                         {underline}
                       </Link>
@@ -141,8 +146,8 @@ export function Navigation() {
             </ul>
           </nav>
 
-          {/* Channel CTA + theme toggle + mobile menu */}
-          <div className="flex items-center gap-3">
+          {/* Channel CTA + mobile menu */}
+          <div className="flex items-center gap-4">
             <a
               href={channelCta.href}
               target="_blank"
@@ -152,7 +157,7 @@ export function Navigation() {
               <span>{channelCta.label}</span>
               <span aria-hidden>↗</span>
             </a>
-            <ThemeToggle />
+            <ThemeToggle className="hidden md:inline-flex" />
             <button
               type="button"
               onClick={() => setOpen((v) => !v)}
@@ -233,7 +238,8 @@ export function Navigation() {
                       </a>
                     ) : (
                       <Link
-                        href={isHash ? `/${item.href}` : item.href}
+                        // "#top" from a non-home page should be a clean "/" — not "/#top".
+                        href={isHash ? (item.href === "#top" ? "/" : `/${item.href}`) : item.href}
                         onClick={() => setOpen(false)}
                         className={className}
                         style={style}
@@ -255,7 +261,7 @@ export function Navigation() {
             >
               {channelCta.label} <span aria-hidden>↗</span>
             </a>
-            <ThemeToggle size="md" />
+            <ThemeToggle />
           </div>
         </div>
       </div>

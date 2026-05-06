@@ -331,7 +331,7 @@ export function FeaturedVideos() {
           padding: 14px 32px;
           border-radius: 9999px;
           border: 1px solid rgb(var(--kc-cream) / 0.3);
-          color: #f5ebdc;
+          color: rgb(var(--kc-cream));
           font-family: var(--font-display);
           font-size: 13px;
           letter-spacing: 0.32em;
@@ -341,7 +341,7 @@ export function FeaturedVideos() {
         .kc-btn-secondary:hover {
           background: #e2761b;
           border-color: #e2761b;
-          color: #0e0b09;
+          color: rgb(var(--kc-ember));
         }
       `}</style>
     </section>

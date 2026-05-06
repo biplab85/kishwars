@@ -265,7 +265,7 @@ export function BookHero() {
 
               {/* Frame layers */}
               <div className="relative z-10 rounded-[3px] bg-ember p-[3px] shadow-2xl shadow-pomegranate/40">
-                <div className="rounded-[2px] bg-cream/95 p-3 md:p-4">
+                <div className="rounded-[2px] bg-[rgba(245,235,220,0.95)] p-3 md:p-4">
                   <div className="relative">
                     <EditorialImage
                       src="/assets/book.jpg"

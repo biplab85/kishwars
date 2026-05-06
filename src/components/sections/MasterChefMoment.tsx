@@ -46,7 +46,7 @@ export function MasterChefMoment() {
               </stop>
             </linearGradient>
           </defs>
-          <rect width="100%" height="100%" fill="url(#kc-mc-bg)" />
+          <rect className="kc-mesh-dark-base" width="100%" height="100%" fill="url(#kc-mc-bg)" />
         </svg>
 
         {/* Central stage spotlight — pulses */}
